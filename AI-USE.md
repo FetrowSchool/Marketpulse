@@ -1,0 +1,148 @@
+# AI use disclosure
+
+## Tools used for this implementation
+| Tool | Model (if known) | Purpose |
+| --- | --- | --- |
+| Codex desktop coding agent | GPT-6 family per agent environment; exact deployed variant unavailable | Generate and revise backend/frontend code, tests, documentation; inspect files and run checks |
+| Codex shell/execution tools | Not a separate model | Create files, install dependencies, execute pytest/Vitest/build, inspect runtime |
+| Web search tool | Model not applicable | Check official Vue/Vite and FastAPI setup/testing/CORS documentation |
+| Codex in-app browser / computer-use tool | Not a separate model | Inspect dashboard accessibility state and desktop screenshot; verify backend status |
+| Sites skill | Not a model | Read repository implementation and local preview guidance; project remains local |
+
+No other editor or coding agent is known to have been used in this session. No
+subagents were used. No image generation or AI API integration was used. In the Yahoo streaming stage,
+a real external provider connection was attempted and one AAPL observation was captured. Browser inspection, if performed, is recorded in the evidence log.
+
+## Model/tool changes
+No model switch is known during this implementation. Dependency installation required
+network permission after the sandbox could not resolve package registry hosts. This
+is an execution-permission change, not a model change.
+
+## Human review and evidence
+The user supplied scope, stack, and acceptance criteria. Agent-generated files require
+normal student review and understanding. Tests demonstrate only the behaviors they
+exercise; no claim of live-market correctness or completed future stages is made.
+See `docs/evidence-log.md` for actual validation and limitations. Add future tools,
+known model identifiers, changes, reasons, prompts, and checks as work continues.
+
+
+## Part 4.1 Yahoo streaming stage — 2026-11-08
+- Continued with the same Codex desktop agent; exact model variant remains unknown.
+  No subagents or additional editors were used.
+- Shell tools inspected installed yfinance 1.8.0 source/protobuf fields, installed
+  dependencies, generated backend services/API/tests/docs, and ran verification.
+- Web tools checked primary yfinance documentation/source for supported streaming.
+- Real Yahoo WebSocket attempts were explicitly requested by the user. Initial DNS
+  and TLS trust-store failures and the certifi-backed successful attempt are separate
+  from offline tests. TLS verification remained enabled. One genuine provider quote
+  is retained as a recorded fixture; its later offline replay is not a live test.
+- No browser/UI tools were needed for this backend-only stage. Frontend charting,
+  broadcasts, trading, indicators, AI/audio, and report.md remain unimplemented.
+- The existing project filesystem again exhibited virtual-environment read timeouts;
+  an isolated source copy with matching dependencies was used for verification when
+  needed. Exact commands, results, and source comparisons are in the evidence log.
+
+
+## Part 4.1 backend-to-Vue WebSocket stage — 2026-11-08
+- Continued using the same Codex desktop coding agent; exact model variant remains
+  unavailable. No subagents, model switches, or additional editors were used.
+- Shell tools inspected existing services/tests/UI, implemented fanout, protocol,
+  reusable frontend transport and dashboard integration, then ran pytest/Vitest/build.
+- Primary-source web lookups checked FastAPI WebSocket lifecycle/testing and MDN
+  browser WebSocket connection semantics. No additional AI API or credentials were used.
+- Codex in-app browser inspected the actual Vue dashboard receiving Yahoo-derived
+  prices/timestamps with distinct browser/feed statuses and last-known labeling.
+- Real provider/server/Vite WebSocket connections were explicitly authorized by the
+  user and were verified separately from offline mocked tests. Captures are evidence,
+  not invented fixtures or guarantees of exchange real-time entitlement.
+- The existing dependency environment was reused (AnyIO made an explicit direct
+  dependency). A matching temporary source copy was used for fast validation because
+  the workspace's virtual-environment file reads have stalled in prior stages.
+- No chart visualization, trading, indicator, AI/audio, deployment, or report.md work
+  was added. See the evidence log for actual results, initial failures and fixes.
+
+
+## Part 4.1 visual workstation — 2026-11-08
+- Continued with the same Codex desktop agent; exact deployed model variant remains
+  unknown. No subagents, additional editors or model switches were used.
+- Shell tools inspected existing UI/API/protocol, installed Lightweight Charts 5.2.1,
+  generated chart/history/revision modules, layout and tests, and ran pytest/Vitest/build.
+- Primary TradingView API/source documentation was consulted for panes, historicalUpdate,
+  whitespace and attribution. No stock data or image was generated by AI.
+- Codex in-app browser verified actual backend history/native canvas, new Yahoo updates,
+  symbol/interval controls, responsive layout and backend interruption/recovery. Screenshots
+  and actual backend candle rows are retained separately from mocked test fixtures.
+- A browser-visible initial-fit issue was fixed using measured sizing and explicit
+  ResizeObserver cleanup. Provider numerical fields are formatted for presentation only;
+  their original values remain in SQLite. Receipt data remains available during failure.
+- Existing Sites local-preview guidance was consulted for local verification only. No
+  hosting registration/publication, credentials, trading, indicators, AI/audio or replay
+  control implementation was added. Exact checks and limitations are in the evidence log.
+
+
+## Part 4.1 persistence audit and deterministic replay — 2026-11-09
+- Continued with the same Codex desktop coding agent; exact deployed model variant
+  remains unknown. No subagents, model switches or additional editors were used.
+- Shell tools inspected database/ingestion/chart code and project instructions, wrote
+  the read-only audit/replay services, routes, Vue transport/controls and tests, and ran
+  pytest, Vitest and the production build. Primary SQLite snapshot and FastAPI docs
+  were checked during implementation. No product AI service or credential was added.
+- Codex in-app browser verified native charts and replay controls against a SQLite-aware
+  backup of actual previously saved Yahoo observations. Yahoo was deliberately disabled;
+  no new live-provider connection/observation is claimed for this stage. Synthetic
+  automated fixtures and genuine saved-provider browser evidence are distinguished.
+- The source-matched /private/tmp verification copy reused installed dependencies because
+  workspace dependency reads have stalled in prior stages. No new package was required.
+- Recorded failed checks include an initial Vue computed-variable shadowing issue,
+  a queued-status test race, a native date-time automation timeout and a test expectation
+  for normalized date-time seconds. Actual corrections/results are in the evidence log.
+- No hosting, report.md, indicators, simulated trading, AI or audio was implemented.
+
+
+## Part 4.1 final requirements audit — 2026-11-09
+- Continued with Codex desktop as the coding agent/editor; exact deployed model variant
+  remains unknown. No subagents, additional editors or model switches were used.
+- Shell tools inspected source/docs/tests, created a fresh temporary source copy and
+  virtual environment, installed documented Python/npm dependencies, ran both suites,
+  built the frontend, audited database rows and inspected npm advisory output.
+- Revised the explicit pipeline probe to exclude saved subscription snapshots and
+  retrieve the exact observed ID, with two mocked regression cases. No product feature
+  outside Part 4.1 or AI integration was added.
+- Codex in-app browser inspected actual newly received Yahoo observations, native charts,
+  source/receipt/age/status labels, symbol/interval selection, simulated upstream outage,
+  replay controls, backend restart/reload and separate simulated volume bars/replay.
+- New-provider receipt was verified independently from genuine saved-data replay and
+  an explicitly synthetic volume fixture. The latter used a separate disposable database;
+  no stock prices were generated by AI and presented as real observations.
+- Existing Sites local-preview guidance was consulted; no hosted Site, deployment or
+  publishing operation occurred. No image-generation, AI API or credential was used.
+- Temporary verification wrappers injected transport OSError failures; they are not
+  part of product code. Exact evidence/results and remaining submission gaps are recorded
+  in docs/evidence-log.md and docs/part-4.1-review.md. No commit/report/video was created.
+
+## Freshness-label refinement — 2026-11-11
+The same Codex desktop agent (exact deployed model unknown) used shell tools to update
+feed-state/UI labels and deterministic regressions, and the in-app browser to inspect
+the running Yahoo-connected dashboard. No subagents, additional editors, model changes
+or product AI integration were used. Stored provenance was preserved. Actual checks
+and an initial timer-test correction are recorded in the evidence log.
+
+## Simultaneous live interval support — 2026-11-11
+The same Codex desktop agent (exact model variant unknown) used shell tools to extend
+atomic candle processing to all three intervals, capability/snapshot responses and Vue
+selection; added deterministic regressions and ran both suites/build. In-app browser
+verification used the running Yahoo-backed app. No additional agents/editors/models,
+product AI integrations or generated real-market data were introduced.
+
+## Chart zoom and replay discoverability — 2026-11-11
+The same Codex desktop agent (exact model unknown) used shell tools and installed library
+type definitions to add chart focus/follow controls, tests and documentation. In-app
+browser tools inspected actual chart zoom and saved replay playback. No additional
+agents, models, editors, AI APIs or generated market observations were used.
+
+## Requested GitHub publication — 2026-11-11
+The same Codex desktop agent (exact model variant unknown) used the GitHub connector
+to verify account identity, the authenticated GitHub CLI to create the requested private
+Marketpulse repository, and shell tools to inspect candidate files and prepare the
+user-requested two-commit sequence. No additional editors/models, product AI APIs,
+credentials in source or generated market data were introduced.

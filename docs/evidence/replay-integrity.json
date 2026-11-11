@@ -1,0 +1,48 @@
+{
+  "provenance": "Actual provider observations saved during preceding verification stages; not synthetic fixtures",
+  "live_feed_enabled": false,
+  "new_live_provider_verification": false,
+  "before": {
+    "provenance": "Actual provider observations saved during preceding verification stages; not synthetic fixtures",
+    "count": 2138,
+    "rows_sha256": "d3ed33d6519ce1b8887d214b7258c22154f39143b8791251bb802e9b896df35c"
+  },
+  "after": {
+    "count": 2138,
+    "rows_sha256": "d3ed33d6519ce1b8887d214b7258c22154f39143b8791251bb802e9b896df35c"
+  },
+  "serialization": "SHA256(UTF-8 json.dumps(rows_as_dicts_ordered_by_id, sort_keys=True))",
+  "rows_unchanged": true,
+  "audit": {
+    "ok": true,
+    "sqlite_integrity": [
+      "ok"
+    ],
+    "foreign_key_violations": 0,
+    "revision_gap_groups": 0,
+    "invalid_metadata_ids": [],
+    "invalid_metadata_count": 0,
+    "observation_count": 2138
+  },
+  "recorded_replay": {
+    "symbol": "AAPL",
+    "interval": "1m",
+    "start": "2026-11-09T04:48:02.000000Z",
+    "end": "2026-11-09T05:03:02.000000Z",
+    "events": 76,
+    "repeat_exactly_equal": true,
+    "final_record_id": 2056,
+    "final_candle_close": 344.33
+  },
+  "browser": {
+    "completed_events": 76,
+    "paused_position": 2,
+    "resumed_speed": 100,
+    "symbols": [
+      "AAPL",
+      "MSFT"
+    ],
+    "console_errors_or_warnings": [],
+    "native_datetime_fill": "Automation timed out; time-range editing not browser-verified. API validation tested."
+  }
+}

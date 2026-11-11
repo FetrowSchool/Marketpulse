@@ -1,0 +1,16 @@
+{
+  "provenance": "recorded_provider_observation; not a mocked or current live quote",
+  "provider": "Yahoo Finance via yfinance 1.8.0 AsyncWebSocket",
+  "recorded_received_timestamp": "2026-11-09T02:48:50.131759Z",
+  "message": {
+    "change": 2.3600159,
+    "change_percent": 0.6893174,
+    "exchange": "NMS",
+    "id": "AAPL",
+    "market_hours": 4,
+    "price": 344.73,
+    "price_hint": "2",
+    "quote_type": 8,
+    "time": "1794192528000"
+  }
+}

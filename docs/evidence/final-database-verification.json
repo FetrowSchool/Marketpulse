@@ -1,0 +1,26 @@
+{
+  "before": {
+    "count": 907,
+    "sha256": "6ecf41c863d00057f9c21ca962eee0da6f27eff57976d4711deb689aed1e1855"
+  },
+  "after_two_initializations": {
+    "count": 907,
+    "sha256": "6ecf41c863d00057f9c21ca962eee0da6f27eff57976d4711deb689aed1e1855"
+  },
+  "all_records_survived": true,
+  "audit": {
+    "ok": true,
+    "sqlite_integrity": [
+      "ok"
+    ],
+    "foreign_key_violations": 0,
+    "revision_gap_groups": 0,
+    "invalid_metadata_ids": [],
+    "invalid_metadata_count": 0,
+    "observation_count": 907
+  },
+  "replay_events": 228,
+  "repeat_rows_equal": true,
+  "replay_no_writes": true,
+  "recorded_data_provenance": "Actual Yahoo observations captured in this audit; not fixtures"
+}

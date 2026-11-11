@@ -1,0 +1,111 @@
+{
+  "provenance": "Actual saved Yahoo observations received after enabling all live intervals",
+  "latest_candles": {
+    "1m": {
+      "id": 41681,
+      "symbol": "AAPL",
+      "data_source": "yahoo_finance",
+      "source_observation_id": "quote-candle-v1:delayed:1m:2026-11-11T21:35:00.000000Z",
+      "observation_type": "constructed_candle",
+      "data_mode": "delayed",
+      "candle_interval": "1m",
+      "candle_open_timestamp": "2026-11-11T21:35:00.000000Z",
+      "open": 355.22,
+      "high": 355.22,
+      "low": 355.22,
+      "close": 355.22,
+      "volume": null,
+      "source_timestamp": "2026-11-11T21:35:53.000000Z",
+      "received_timestamp": "2026-11-11T21:36:00.207784Z",
+      "revision": 2,
+      "candle_complete": true,
+      "content_hash": "2a9b4f88ead7d072154fc2d2f67dfe05d9418ed1ccedf858276105586b7a609b",
+      "metadata": {
+        "candle_origin": "locally_constructed",
+        "construction": "source_time_quotes_v1",
+        "contributing_observation_ids": [
+          41673
+        ],
+        "coverage": "observed_quotes_only; gaps and late corrections possible",
+        "observation_count": 1,
+        "tie_break": "ingest_id",
+        "volume_unavailable_reason": "No reliable interval trade volume in Yahoo quote stream"
+      },
+      "price": null
+    },
+    "5m": {
+      "id": 41675,
+      "symbol": "AAPL",
+      "data_source": "yahoo_finance",
+      "source_observation_id": "quote-candle-v1:delayed:5m:2026-11-11T21:35:00.000000Z",
+      "observation_type": "constructed_candle",
+      "data_mode": "delayed",
+      "candle_interval": "5m",
+      "candle_open_timestamp": "2026-11-11T21:35:00.000000Z",
+      "open": 355.22,
+      "high": 355.22,
+      "low": 355.22,
+      "close": 355.22,
+      "volume": null,
+      "source_timestamp": "2026-11-11T21:35:53.000000Z",
+      "received_timestamp": "2026-11-11T21:35:56.522141Z",
+      "revision": 1,
+      "candle_complete": false,
+      "content_hash": "744d9e48657c0d140579359dc6cb804fb4e7d442bdc0b32ef823f28bc1524fc5",
+      "metadata": {
+        "candle_origin": "locally_constructed",
+        "construction": "source_time_quotes_v1",
+        "contributing_observation_ids": [
+          41673
+        ],
+        "coverage": "observed_quotes_only; gaps and late corrections possible",
+        "observation_count": 1,
+        "tie_break": "ingest_id",
+        "volume_unavailable_reason": "No reliable interval trade volume in Yahoo quote stream"
+      },
+      "price": null
+    },
+    "15m": {
+      "id": 41676,
+      "symbol": "AAPL",
+      "data_source": "yahoo_finance",
+      "source_observation_id": "quote-candle-v1:delayed:15m:2026-11-11T21:30:00.000000Z",
+      "observation_type": "constructed_candle",
+      "data_mode": "delayed",
+      "candle_interval": "15m",
+      "candle_open_timestamp": "2026-11-11T21:30:00.000000Z",
+      "open": 355.2,
+      "high": 355.2754,
+      "low": 355.14,
+      "close": 355.22,
+      "volume": null,
+      "source_timestamp": "2026-11-11T21:35:53.000000Z",
+      "received_timestamp": "2026-11-11T21:35:56.522141Z",
+      "revision": 1,
+      "candle_complete": false,
+      "content_hash": "40011ac07743fc8c9873cbece98480e6e0cdf4f4f32801e671b02880d6e88260",
+      "metadata": {
+        "candle_origin": "locally_constructed",
+        "construction": "source_time_quotes_v1",
+        "contributing_observation_ids": [
+          41403,
+          41451,
+          41453,
+          41459,
+          41461,
+          41463,
+          41517,
+          41533,
+          41569,
+          41585,
+          41673
+        ],
+        "coverage": "observed_quotes_only; gaps and late corrections possible",
+        "observation_count": 11,
+        "tie_break": "ingest_id",
+        "volume_unavailable_reason": "No reliable interval trade volume in Yahoo quote stream"
+      },
+      "price": null
+    }
+  }
+}

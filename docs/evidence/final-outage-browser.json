@@ -1,0 +1,13 @@
+{
+  "failure": "Simulated upstream transport errors; real backend stayed running",
+  "first": {
+    "status": "BROWSER ↔ BACKEND\nConnected\nApplication WebSocket\nYAHOO FINANCE FEED\nUnavailable\nProvider socket: disconnected / unknown\nSOURCE DATA AGE\n6.0s\ndelayed · source clock in UTC\nBACKEND HEALTH\nAvailable\nDatabase: Connected · v0.1.0",
+    "candle": "O 351.435\nH 351.54\nL 351.405\nC 351.53\nComplete",
+    "observation": "LATEST OBSERVATION\n#897 · revision 1\nSOURCE IDENTITY\nsha256:d4c4c34fa42704eb98f6706b6d644d6a82e4366a86556bd445cd23d710202ebc\nREGULAR SESSION\nregular window unverified"
+  },
+  "later": {
+    "status": "BROWSER ↔ BACKEND\nConnected\nApplication WebSocket\nYAHOO FINANCE FEED\nUnavailable\nProvider socket: disconnected / unknown\nSOURCE DATA AGE\n23.0s\ndelayed · source clock in UTC\nBACKEND HEALTH\nAvailable\nDatabase: Connected · v0.1.0",
+    "candle": "O 351.435\nH 351.54\nL 351.405\nC 351.53\nComplete",
+    "observation": "LATEST OBSERVATION\n#897 · revision 1\nSOURCE IDENTITY\nsha256:d4c4c34fa42704eb98f6706b6d644d6a82e4366a86556bd445cd23d710202ebc\nREGULAR SESSION\nregular window unverified"
+  }
+}
