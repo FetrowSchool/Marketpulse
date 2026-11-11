@@ -6,8 +6,8 @@ Prepared November 11, 2026. Verification results below are from the November 9,
 ## Repository information
 
 Project: MarketPulse — Live Market Workstation
-* Repository: [GitHub Repository URL]
-* Submitted Commit: [Commit Hash]
+* Repository: [FetrowSchool/Marketpulse](https://github.com/FetrowSchool/Marketpulse)
+* Submitted Commit: [bc9ff3c46d25d0036ad29fe7cdc57bd9bcf11f27](https://github.com/FetrowSchool/Marketpulse/commit/bc9ff3c46d25d0036ad29fe7cdc57bd9bcf11f27)
 
 
 ## Project overview
