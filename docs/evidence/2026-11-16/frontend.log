@@ -1,0 +1,16 @@
+
+> marketpulse@0.1.0 test
+> vitest run
+
+
+ RUN  v5.1.0 /private/tmp/marketpulse-verification-20261116/frontend
+
+
+ Test Files  13 passed (13)
+      Tests  49 passed (49)
+   Start at  17:01:00
+   Duration  1.40s (environment 67%, transform 16%, tests 11%, import 5%)
+
+    Isolate  13 workers spawned · ~605ms startup each (spawn + environment, per file)
+             at least ~269ms faster with isolate: false — reuses workers across files instead of one per file
+

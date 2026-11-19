@@ -35,3 +35,28 @@ it('passes automatic zoom and follow settings to the renderer', async () => {
   expect(mocks.focus).toHaveBeenLastCalledWith(10,false)
   delete mocks.focus
 })
+
+it('forwards indicator snapshots and visibility changes without replacing price candles',async()=>{
+  mocks.indicators=vi.fn()
+  const points={points:[{sma20:100}],signals:[]}
+  wrapper=mount(MarketChart,{props:{symbol:'AAPL',interval:'1m',candles:[candle()],indicators:points}})
+  expect(mocks.indicators).toHaveBeenLastCalledWith(points,true,[],{showSignals:true,showFills:true})
+  await wrapper.setProps({showIndicators:false})
+  expect(mocks.indicators).toHaveBeenLastCalledWith(points,false,[],{showSignals:true,showFills:true})
+  expect(mocks.apply).toHaveBeenCalled()
+  delete mocks.indicators
+})
+
+
+it('shows selected confirmed signal details without inventing executions and clears scope changes',async()=>{
+ const row=candle({candle_complete:true}),point={...row,signal:'BUY',signal_id:'confirmed-buy',confirmed:true,sma20:101,sma50:100.4}
+ wrapper=mount(MarketChart,{props:{symbol:'AAPL',interval:'1m',candles:[row],indicators:{points:[point],signals:[point]}}})
+ await wrapper.get('[aria-label="Select crossover signal"]').setValue('confirmed-buy')
+ expect(wrapper.get('[data-testid="selected-signal-details"]').text()).toContain('101 / 100.4')
+ expect(wrapper.get('[data-testid="selected-signal-details"]').text()).toContain('No matching execution')
+ await wrapper.setProps({strategyFills:[{id:3,symbol:'AAPL',interval:'1m',side:'BUY',quantity:16,execution_price:'125',source_timestamp:'2026-01-06T15:01:01Z',signal_candle_open_timestamp:row.candle_open_timestamp,signal_direction:'BUY'}]})
+ expect(wrapper.get('[data-testid="selected-signal-details"]').text()).toContain('Executed')
+ expect(wrapper.get('[data-testid="selected-signal-details"]').text()).toContain('16 shares')
+ await wrapper.setProps({symbol:'MSFT',candles:[]})
+ expect(wrapper.find('[data-testid="selected-signal-details"]').exists()).toBe(false)
+})

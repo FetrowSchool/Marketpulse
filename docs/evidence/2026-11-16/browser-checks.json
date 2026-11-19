@@ -1,0 +1,98 @@
+{
+  "date": "2026-11-16",
+  "data_kind": "isolated explicit synthetic fixtures; provider intentionally unavailable",
+  "checks": [
+    {
+      "check": "initial dashboard",
+      "passed": true,
+      "observed": "Fixture banner, candlestick canvas, SMA20=100/SMA50=100, 50 reliable fixture-volume bars, account10000, provider unavailable"
+    },
+    {
+      "check": "SMA visibility toggle",
+      "passed": true
+    },
+    {
+      "check": "manual BUY10 at100",
+      "passed": true,
+      "cash": "$9,000.00"
+    },
+    {
+      "check": "manual full SELL10 at110",
+      "passed": true,
+      "cash": "$10,100.00",
+      "realized": "$100.00"
+    },
+    {
+      "check": "rejected sell without shares",
+      "passed": true,
+      "observed": "insufficient shares; no fill"
+    },
+    {
+      "check": "automatic confirmed BUY",
+      "passed": true,
+      "cash": "$8,100.00",
+      "observed": "Confirmed BUY; backend trace links 16 shares at125 to later fixture observation"
+    },
+    {
+      "check": "automatic confirmed SELL",
+      "passed": true,
+      "cash": "$9,540.00",
+      "realized": "-$460.00"
+    },
+    {
+      "check": "backtest UI results",
+      "passed": true,
+      "observed": "MSFT fixture SMA20/50, equity9440,1 round trip,2 fills"
+    },
+    {
+      "check": "backtest equity/trade history and account isolation",
+      "passed": true,
+      "observed": "Curve rendered;125→90,16 shares, loss560; main fixture account cash9540 unchanged"
+    },
+    {
+      "check": "insufficient historical data",
+      "passed": true,
+      "observed": "SPY empty fixture data produces clear51/0 error; no invented candles or trades"
+    },
+    {
+      "check": "replay pause and order-control isolation",
+      "passed": true,
+      "observed": "1 / 30 recorded events"
+    },
+    {
+      "check": "replay completion, recorded labels and volume",
+      "passed": true,
+      "observed": "30 / 30 recorded events"
+    },
+    {
+      "check": "return to live restores trading controls",
+      "passed": true
+    },
+    {
+      "check": "nonzero unrealized P/L rendering",
+      "passed": true,
+      "observed": "Buy1 MSFT reference80, saved fixture mark90, unrealized10/equity9550"
+    },
+    {
+      "check": "collapsed status card shrinks",
+      "passed": true,
+      "openHeight": 95,
+      "closedHeight": 43
+    },
+    {
+      "check": "refresh restores hidden panels and persistent account",
+      "passed": true
+    },
+    {
+      "check": "backtest repeated after page reload",
+      "passed": true
+    }
+  ],
+  "revised_approaches": [
+    "Rejected-order expectation corrected from insufficient manual shares to observed insufficient shares for an empty position",
+    "Datetime-local range fill was unsupported by this automation path; used the app-generated15minute range instead",
+    "Native disclosure button-role selector failed; used its observed summary element instead"
+  ],
+  "main_account_test_orders": 0,
+  "source_code_changes": false
+}

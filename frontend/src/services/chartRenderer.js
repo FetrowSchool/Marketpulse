@@ -1,5 +1,6 @@
-import { createChart, CandlestickSeries, HistogramSeries, ColorType } from 'lightweight-charts'
+import { createChart, CandlestickSeries, HistogramSeries, LineSeries, createSeriesMarkers, ColorType } from 'lightweight-charts'
 import { reliableVolume } from './candleBook.js'
+import {chartPoints,confirmedChartSignals,scopedFills,chartTime} from './chartSignals.js'
 
 const UP = '#54d6b1'
 const DOWN = '#ed8093'
@@ -14,7 +15,7 @@ export function volumeBar(row) {
   const time = Date.parse(row.candle_open_timestamp) / 1000
   return reliableVolume(row) ? { time, value: row.volume, color: row.close >= row.open ? '#318872' : '#9d5265' } : { time }
 }
-export function createChartRenderer(container, factory = createChart) {
+export function createChartRenderer(container, factory = createChart, {onSignalSelect=()=>{}}={}) {
   const chart = factory(container, {
     // Supply measured dimensions before fitting data; asynchronous autoSize can fit against width zero.
     autoSize: false, width: Math.max(1, container.clientWidth), height: Math.max(1, container.clientHeight),
@@ -34,9 +35,17 @@ export function createChartRenderer(container, factory = createChart) {
   }, 0)
   const volumeSeries = chart.addSeries(HistogramSeries, { priceFormat: { type: 'volume' },
     lastValueVisible: false, priceLineVisible: false }, 1)
+  const sma20Series = chart.addSeries(LineSeries, { color: '#62c9ff', lineWidth: 2, title: 'SMA 20', priceLineVisible: false, lastValueVisible: false }, 0)
+  const sma50Series = chart.addSeries(LineSeries, { color: '#e9b764', lineWidth: 2, title: 'SMA 50', priceLineVisible: false, lastValueVisible: false }, 0)
+  const markers = createSeriesMarkers(priceSeries, [])
   chart.panes()[0].setStretchFactor(4)
   chart.panes()[1].setStretchFactor(1)
   let context
+  let markerSelection=new Map(), signalTimes=new Map(),lastMarkerKey=''
+  function selectHovered(event){const id=markerSelection.get(event.hoveredObjectId);if(id)onSignalSelect(id)}
+  function selectClicked(event){const id=markerSelection.get(event.hoveredObjectId)||signalTimes.get(event.time);if(id)onSignalSelect(id)}
+  chart.subscribeClick?.(selectClicked)
+  chart.subscribeCrosshairMove?.(selectHovered)
   let rendered = new Map()
   let fitted = false
   let focusCount = 0, following = true
@@ -56,7 +65,7 @@ export function createChartRenderer(container, factory = createChart) {
   return {
     apply(rows, key, { loading = false } = {}) {
       const changedContext = key !== context
-      if (changedContext) { context = key; rendered = new Map(); fitted = false }
+      if (changedContext) { context = key; rendered = new Map(); fitted = false; sma20Series.setData([]); sma50Series.setData([]); markers.setMarkers([]);markerSelection.clear();signalTimes.clear();lastMarkerKey='';onSignalSelect(null) }
       const next = new Map(rows.map(row => [Date.parse(row.candle_open_timestamp) / 1000, row]))
       const lastTime = rendered.size ? Math.max(...rendered.keys()) : -Infinity
       const changed = rows.filter(row => stamp(row) !== stamp(rendered.get(Date.parse(row.candle_open_timestamp) / 1000) || {}))
@@ -84,6 +93,43 @@ export function createChartRenderer(container, factory = createChart) {
       if (!loading && rows.length && !fitted) { chart.timeScale().fitContent(); fitted = true }
       if (focusCount && (following || changedContext)) focusLatest()
     },
+    indicators(data, visible = true, strategyFills = [], {showSignals=true,showFills=true}={}) {
+      const [symbol,interval]=context?.split(':').slice(-2)||[]
+      const candles=[...rendered.values()]
+      const points = visible ? chartPoints(data,candles,symbol,interval) : []
+      const line = key => points.map(point => ({time: chartTime(point.candle_open_timestamp),
+        ...(Number.isFinite(point[key]) ? {value: point[key]} : {})}))
+      sma20Series.applyOptions?.({title:`SMA ${data?.configuration?.fast_period||20}`})
+      sma50Series.applyOptions?.({title:`SMA ${data?.configuration?.slow_period||50}`})
+      sma20Series.setData(line('sma20')); sma50Series.setData(line('sma50'))
+      const signals=confirmedChartSignals(data,candles,symbol,interval)
+      const signalMarkers = showSignals ? signals.map(point => ({
+        id: point.signal_id, time: chartTime(point.candle_open_timestamp),
+        position: point.signal === 'BUY' ? 'belowBar' : 'aboveBar',
+        shape: point.signal === 'BUY' ? 'arrowUp' : 'arrowDown',
+        color: point.signal === 'BUY' ? UP : DOWN, text: point.signal,
+      })) : []
+      const intervals = {'1m':60,'5m':300,'15m':900}
+      const fills=scopedFills(strategyFills,symbol,interval)
+      const fillMarkers=showFills ? fills.map(fill=>({
+        id:fill.marker_id||`paper-fill:${fill.id}`,time:Math.floor(chartTime(fill.source_timestamp)/intervals[interval])*intervals[interval],
+        position:fill.side==='BUY'?'belowBar':'aboveBar',shape:'circle',color:'#d4a1f0',
+        size:.75,text:`FILL ${fill.side} ${fill.quantity}`,
+      })).filter(marker=>rendered.has(marker.time)) : []
+      markerSelection=new Map(signalMarkers.map(marker=>[marker.id,marker.id]))
+      signalTimes=new Map(signalMarkers.map(marker=>[marker.time,marker.id]))
+      const signalIds=new Set(signals.map(signal=>signal.signal_id))
+      const slots=new Map(signals.map(signal=>[`${chartTime(signal.candle_open_timestamp)}:${signal.signal}`,signal.signal_id]))
+      const visibleFillIds=new Set(fillMarkers.map(marker=>marker.id))
+      for(const fill of fills){
+        const id=fill.marker_id||`paper-fill:${fill.id}`
+        const signalId=signalIds.has(fill.signal_id)?fill.signal_id:slots.get(`${chartTime(fill.signal_candle_open_timestamp)}:${fill.signal_direction}`)
+        if(signalId&&visibleFillIds.has(id))markerSelection.set(id,signalId)
+      }
+      const all=[...signalMarkers,...fillMarkers].sort((a,b)=>a.time-b.time || String(a.id).localeCompare(String(b.id)))
+      const nextKey=JSON.stringify(all)
+      if(nextKey!==lastMarkerKey){markers.setMarkers(all);lastMarkerKey=nextKey}
+    },
     resize(width, height) { if (width > 0 && height > 0) chart.resize(Math.floor(width), Math.floor(height)) },
     focus(count, follow = true) {
       focusCount = Number.isInteger(count) && count > 0 ? count : 0
@@ -92,6 +138,6 @@ export function createChartRenderer(container, factory = createChart) {
       else if (rendered.size) chart.timeScale().fitContent()
     },
     fit() { chart.timeScale().fitContent() },
-    remove() { chart.remove() },
+    remove() { chart.unsubscribeClick?.(selectClicked);chart.unsubscribeCrosshairMove?.(selectHovered);markers.detach?.();chart.remove() },
   }
 }

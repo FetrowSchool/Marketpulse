@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-12",
+  "migration": "Additive paper_schema.sql plus idempotent account seed; original market schema_version remains1",
+  "before": {
+    "count": 85607,
+    "ordered_row_sha256": "d5d4077662b47c734127b70773015b03f7553123841c1dd758f86b59135dad0d"
+  },
+  "after_repeated_initialization": {
+    "count": 85607,
+    "ordered_row_sha256": "d5d4077662b47c734127b70773015b03f7553123841c1dd758f86b59135dad0d"
+  },
+  "market_records_unchanged": true,
+  "serialization": "SHA256 of each ID-ordered json.dumps(row,sort_keys=True) plus newline",
+  "account_mode": "SIMULATED",
+  "cash": "10000.000000",
+  "equity": "10000.000000",
+  "order_count": 0,
+  "fill_count": 0,
+  "audit": {
+    "ok": true,
+    "sqlite_integrity": [
+      "ok"
+    ],
+    "foreign_key_violations": 0,
+    "revision_gap_groups": 0,
+    "invalid_metadata_ids": [],
+    "invalid_metadata_count": 0,
+    "observation_count": 85607
+  },
+  "no_user_account_test_orders_executed": true
+}

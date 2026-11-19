@@ -1,0 +1,51 @@
+{
+  "date": "2026-11-16",
+  "backend_tests": {
+    "passed": 208,
+    "failed": 0,
+    "warnings": 1
+  },
+  "frontend_tests": {
+    "passed": 49,
+    "failed": 0,
+    "files": 13
+  },
+  "production_build": "passed",
+  "browser_workflow_checks": {
+    "passed": 17,
+    "failed": 0,
+    "data": "synthetic isolated fixture; provider intentionally unavailable"
+  },
+  "independent_sma_reference": {
+    "points": 360,
+    "absolute_tolerance_usd": 1e-09,
+    "maximum_absolute_error_usd": 2.3283064365386963e-10
+  },
+  "backtest_fixture": {
+    "completed_trades": 1,
+    "ending_cash": "9440.000000",
+    "ending_equity": "9440.000000",
+    "fill_count": 2,
+    "max_drawdown_percent": "7.200",
+    "open_quantity": 0,
+    "realized_pl": "-560.000000",
+    "starting_equity": "10000.000000",
+    "total_return_percent": "-5.600",
+    "unrealized_pl": "0.000000",
+    "win_rate_percent": "0"
+  },
+  "repeated_backtest_identical_except_run_id": true,
+  "ci_local_validation": "passed",
+  "github_hosted_ci": "not run; awaiting authorized commit/push",
+  "production_source_files_unchanged": 87,
+  "report_unchanged": true,
+  "commit_created": false,
+  "pushed": false,
+  "main_account_test_orders": 0,
+  "limitations": [
+    "No live-provider browser verification in this run",
+    "No hosted CI run",
+    "Existing Starlette/httpx deprecation warning",
+    "Simplified execution and sparse historical-data assumptions remain"
+  ]
+}

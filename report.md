@@ -1,7 +1,4 @@
-# MarketPulse — Assignment 4, Part 4.1
-
-Prepared November 11, 2026. Verification results below are from the November 9,
-2026 audit; tests were not rerun for this documentation-only report.
+# MarketPulse — Assignment 4, Part 4.2
 
 ## Repository information
 
@@ -12,43 +9,61 @@ Project: MarketPulse — Live Market Workstation
 
 ## Project overview
 
-I developed MarketPulse, a web-based stock market dashboard using Vue 3, FastAPI, and SQLite. The app uses Yahoo Finance to retrieve market information and uses WebSockets to communicate updates between the backend and frontend.
+For part 2, I exapnded the app by adding technical indicators, simulated trading, and historical backtesting. The app still uses  ue 3, FastAPI, and SQLite while building on the market-data dashboard developed in Part 4.1. The goal of this part was to allow the application to interpret market trends, generate trading signals, and evaluate the results of a trading strategy.
 
-My goal for this part was to establish the foundation for trading site by providing market data visualization, database persistence, and historical replay.
+## technical indicators
 
-## Market Data and Dashboard
+The app includes two simple moving averages:
 
-The application includes:
+* SMA(20), which calculates the average closing price of the previous 20 candles.
+* SMA(50), which calculates the average closing price of the previous 50 candles.
 
-* Yahoo Finance market data using yfinance.
-* Candlestick charts using TradingView Lightweight Charts.
-* Volume visualization.
-* Stock symbol selection.
-* WebSocket communication between FastAPI and Vue.
-* Market data source, timestamps, and status indicators.
+Both indicators are displayed on the candlestick chart.
 
+The application detects crossovers between the two moving averages to generate BUY and SELL signals. A BUY signal occurs when SMA(20) crosses above SMA(50), while a SELL signal occurs when SMA(20) crosses below SMA(50).
 
-The backend processes incoming observations before sending updates to the frontend. The dashboard distinguishes live market observations from delayed, stale, and recorded data.
+## Simulated trading 
 
+MarketPulse includes a simulated trading account with a starting balance of $10,000.
 
-## Database and Replay
+The application tracks:
 
-SQLite is used to store market observations and candlestick information.The database preserves  source & recipt timestamps, revisions, and candle completion status. The application handles duplicate observations, revised candles, and out of order updates while preserving historical information. Recorded observations can be retrieved and replayed without requiring an active Yahoo Finance connection. This allows the dashboard to be shown when the market is closed.
+* Available cash
+* Open positions
+* Orders and fills
+* Average purchase price
+* Realized profit/loss
+* Unrealized profit/loss
+* Total account equity
+* Trading history
+
+The automated strategy uses confirmed SMA crossover signals to make simulated trading decisions.
+
+When a BUY signal occurs, the strategy uses up to 20% of available cash toward purchasing shares. When a SELL signal occurs, it attempts to sell based on expected profit margins.
+
 
 ## Design Decisions
 
 I separated market data processing from the frontend so the backend could manage external connections, database storage, and WebSocket communication independently. I also chose to preserve previous observation revisions rather than overwriting them. This helps show historical replay and provides a foundation for Part 4.2. 
 
-## Automated testing and startup
+## Historic backtesting
 
-| Check | Passed | Failed | Skipped | Result |
-| Backend pytest | 117 | 0 | 0 | 8.00 seconds; one existing test-client deprecation warning |
-| Frontend Vitest | 24 | 0 | 0 | Seven test files, 770ms |
-| Frontend production build | — | 0 | — | Passed, Vite 7.3.7, 385ms |
+The application includes a backtesting system that evaluates the SMA crossover strategy using historical market data. The backtesting engine processes historical candles and generates simulated trades based on confirmed crossover signals.
+
+Backtesting results include:
+
+* Starting and ending account equity
+* Total return
+* Number of trades
+* Win rate
+* Maximum drawdown
+* Trade history
+* Equity curve
+
 
 ## limitations
 
-Yahoo Finance data availability depends on market hours, provider connectivity, and potential data delays. The app displays data age and feed status to make these limitations visible.
+The SMA crossover strategy relies on historical price trends and cannot guarantee profitable trading decisions. Backtesting performance also depend on the availability of historical market data. 
 
 ## Project Files and Documentation
 
@@ -57,8 +72,28 @@ Yahoo Finance data availability depends on market hours, provider connectivity, 
 - [design.md](design.md)
 - [Architecture Documentation](docs/architecture.md)
 - [Database Documentation](docs/database.md)
+- [SMA and Crossover Rules](docs/indicators.md)
+- [Simulated Accounting and Execution Assumptions](docs/paper-trading.md)
+- [Automatic SMA Strategy](docs/strategy.md)
+- [Backtesting and Limitations](docs/backtesting.md)
+- [Latest Verification Record — November 16](docs/testing-2026-11-16.md)
+- [Browser Test Cases](docs/browser-test-cases.md)
 - [AI Use Disclosure](AI-USE.md)
 - [Evidence Log](docs/evidence-log.md)
+
+### Verification evidence
+
+- [Test Summary](https://github.com/FetrowSchool/Marketpulse/blob/codex/part-2/docs/evidence/2026-11-16/summary.json)
+- [Backend Test Output](https://github.com/FetrowSchool/Marketpulse/blob/codex/part-2/docs/evidence/2026-11-16/backend.log)
+- [Frontend Test Output](https://github.com/FetrowSchool/Marketpulse/blob/codex/part-2/docs/evidence/2026-11-16/frontend.log)
+- [Production Build Output](https://github.com/FetrowSchool/Marketpulse/blob/codex/part-2/docs/evidence/2026-11-16/build.log)
+- [SMA Expected/Actual Reference Values](https://github.com/FetrowSchool/Marketpulse/blob/codex/part-2/docs/evidence/2026-11-16/sma-reference.json)
+- [Browser Workflow Results and Revised Approaches](https://github.com/FetrowSchool/Marketpulse/blob/codex/part-2/docs/evidence/2026-11-16/browser-checks.json)
+- [Crossover, Simulated Fill, and Account Screenshot](https://github.com/FetrowSchool/Marketpulse/blob/codex/part-2/docs/evidence/2026-11-16/browser-chart-crossover.jpg)
+- [Backtest Results, Equity Curve, and Trade History Screenshot](https://github.com/FetrowSchool/Marketpulse/blob/codex/part-2/docs/evidence/2026-11-16/browser-backtest-panel.jpg)
+- [Backtest Calculation and Trade Data](https://github.com/FetrowSchool/Marketpulse/blob/codex/part-2/docs/evidence/2026-11-16/browser-backtest-result.json)
+- [Simulated Account, Orders, and Fills Evidence](https://github.com/FetrowSchool/Marketpulse/blob/codex/part-2/docs/evidence/2026-11-16/browser-final-account.json)
+- [Local CI Configuration Check](https://github.com/FetrowSchool/Marketpulse/blob/codex/part-2/docs/evidence/2026-11-16/ci-local-validation.log)
 
 ## Demonstration Recording
 

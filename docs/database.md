@@ -2,7 +2,7 @@
 
 ## Schema and relationships
 Canonical executable schema: [`backend/app/schema.sql`](../backend/app/schema.sql).
-There are two tables, with no foreign-key relationship: `schema_version` records the
+The original market schema has two tables, with no foreign-key relationship: `schema_version` records the
 schema version (currently 1), and `observations` holds immutable observations.
 `PRAGMA foreign_keys=ON` is applied for future relationships; WAL permits readers
 while writes are serialized. Each connection has a 10-second lock timeout.
@@ -220,3 +220,71 @@ per interval. Tests verify that a failure in the final (15m) candle rolls back a
 preceding raw/1m/5m inserts and emits no events. Schema version, indexes and original
 records are unchanged. Old buckets without saved 5m/15m candles are not bulk-backfilled;
 a new quote rebuilds its affected buckets from available persisted source observations.
+
+## Part 4.2 indicators
+No migration or indicator/signal table is added. GET indicator snapshots use a read-only
+transaction and resolve latest revisions within id<=as_of_id before calculations.
+POST chart/replay evaluation uses supplied arrived rows only and never inserts records.
+Stable signal IDs identify replaceable derived chart slots; they are not provider
+observation IDs or an execution ledger. See indicators.md for revision/as-of semantics.
+
+## Manual simulated-account component — 2026-11-12
+The original market tables and schema_version1 remain unchanged. Additive paper_schema.sql
+adds accounting_schema_version1, simulated_accounts, paper_orders, paper_fills and
+paper_positions, bringing application tables to seven (excluding SQLite internals).
+Account seed insertion is idempotent and never replaces balances. The same startup
+transaction installs both schemas and inserts the $10,000 SIMULATED account once.
+
+Money is integer micro-USD, quantity integer shares. Account→orders/positions/fills and
+order→fill foreign keys preserve relationships. Orders have unique account/client keys
+and canonical request hashes; each order can have at most one fill. Fill records are
+immutable, orders cannot be deleted, input details/terminal statuses cannot be rewritten.
+Market observation UPDATE/DELETE protection is untouched. Positions/cash are mutable
+materialized accounting state, updated only with the fill in one BEGIN IMMEDIATE transaction.
+
+A backed-up actual capture DB retained all85,607 market rows and identical ordered-row
+SHA-256 across two initializations. Integrity/FK/revision audits passed; the account
+remained$10,000 with no orders/fills. Evidence: evidence/paper-account-migration.json.
+Execution/accounting formulas, rounding, schema responsibilities and known examples are
+in paper-trading.md. No automatic trading/backtesting table or behavior is added.
+
+## Strategy persistence and safe fill-source migration — 2026-11-12
+strategy_schema.sql adds strategy_schema_version1 and these relationships:
+- strategy_config: singleton, persisted enabled/symbol/interval, fixed20/50 periods/20%.
+- strategy_scopes: per strategy/symbol/interval activation ID/time and completion watermark.
+- strategy_signals: immutable signal ID, unique scope/candle slot, confirming observation
+  FK, SMA values, confirmation availability and input candle IDs/revisions JSON.
+- strategy_decisions: unique decision key, signal/candle/order/fill/execution-observation
+  FKs, waiting/executed/skipped/hold/revision_ignored/canceled state, reason/account snapshot.
+- strategy_positions: scope-owned whole-share quantities within pooled account positions.
+- strategy_order_links: order→scope and actual execution quote observation FK.
+
+Existing market and accounting schema versions stay1. Initialization uses BEGIN IMMEDIATE
+and individual complete SQL statements, avoiding executescript's implicit commit.
+Legacy paper_fills CHECK(price_source='manual_reference') is widened to additionally
+allow observed_quote by a transactional table rebuild **before** strategy FK creation.
+All original fill IDs/values are copied; triggers/indexes are restored. Repeat startup
+skips this migration and seeds only missing configuration/account rows. Market observations
+are never rewritten. A nonempty legacy-fill migration is tested.
+
+Running-database backup and two initializations preserved identical row counts/SHA256
+for89,807 observations, account, orders, fills and positions. integrity_check=ok,
+foreign-key violations=0, revision gaps=0. Automatic trading remainsOFF with no strategy
+signals/test orders. Exact evidence: evidence/strategy-migration.json. Signal identity
+and arrival/execution rules are in strategy.md; earlier observation dedup rules are unchanged.
+
+## Isolated backtest results — 2026-11-12
+backtest_schema.sql adds backtest_schema_version1 and backtest_runs:
+id INTEGER PRIMARY KEY AUTOINCREMENT; created_timestamp UTC TEXT; input_hash SHA256;
+configuration_json and result_json validated JSON, all NOT NULL. Created-time/ID index
+supports result history; UPDATE/DELETE triggers retain saved evidence. Existing schema
+versions/observations/accounts are unchanged. This additive DDL runs in the same repeatable
+startup transaction. Results contain input candle IDs/revisions, configuration, metrics,
+decisions, fills, completed trades and equity; they do not reference paper_orders/fills.
+Immutable market rows remain retrievable for lineage. Snapshot max ID and canonical input
+hash make deterministic reruns auditable; each run intentionally receives a separate ID.
+
+Two initializations plus two saved-provider-data runs retained exact hashes/counts of
+all11 pre-existing market/account/strategy tables (108,941 observations); only backtest
+results were inserted. Integrity/FK/revision audits passed. See
+[evidence/backtest-verification.json](evidence/backtest-verification.json).

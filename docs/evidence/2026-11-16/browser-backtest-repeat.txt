@@ -1,0 +1,648 @@
+Browser tab: 3, Title: "MarketPulse | Market workstation", URL: "http://127.0.0.1:5174/".
+1 AXWebArea MarketPulse | Market workstation, URL: 127.0.0.1:5174/
+	2 text SIMULATED BROWSER TEST FIXTURES — NO REAL MARKET DATA OR TRADES
+	3 container app
+		4 container
+			5 link Description: Market Pulse, Value: 127.0.0.1:5174/#
+			6 text MARKET WORKSTATION Unavailable
+		7 container
+			8 text MARKET DATA / WORKSTATION
+			9 heading Market overview, Value: 1
+				10 text Market overview
+			560 text SIMULATED
+			12 container System status
+				13 container
+					14 button (expanded) ▾ BROWSER ↔ BACKEND, Secondary Actions: Collapse
+						15 text ▾
+						16 text BROWSER ↔ BACKEND
+					17 text Connected Application WebSocket
+				18 container
+					19 button (expanded) ▾ YAHOO FINANCE FEED, Secondary Actions: Collapse
+						20 text ▾
+						21 text YAHOO FINANCE FEED
+					561 text Unavailable Provider socket: disconnected / unknown
+				23 container
+					24 button (expanded) ▾ SOURCE DATA AGE, Secondary Actions: Collapse
+						25 text ▾
+						26 text SOURCE DATA AGE
+					562 text 546.8s simulated · source clock in UTC
+				28 button (collapsed) ▸ BACKEND HEALTH, Secondary Actions: Expand
+					29 text ▸
+					30 text BACKEND HEALTH
+			31 container MSFT · 1m
+				32 button (expanded) ▾ MSFT · 1m price & volume chart, Secondary Actions: Collapse
+					33 text ▾
+					34 text MSFT · 1m price & volume chart
+				35 container Market chart selection
+					36 container
+						37 text MODE
+						38 pop up button (collapsed, settable) Description: Data mode, Value: Live, Secondary Actions: Expand
+							39 menu
+								40 (selected) Live
+								41 Replay
+					42 container
+						43 text STOCK
+						44 pop up button (collapsed, settable) Description: Stock symbol, Value: MSFT, Secondary Actions: Expand
+							45 menu
+								46 AAPL
+								47 (selected) MSFT
+								48 NVDA
+								49 SPY
+					50 container
+						51 text INTERVAL
+						52 pop up button (collapsed, settable) Description: Candle interval, Value: 1m, Secondary Actions: Expand
+							53 menu
+								54 (selected) 1m
+								55 5m
+								56 15m
+					57 button Reconnect Yahoo feed
+				563 text M
+				59 heading MSFT · 1m, Value: 2, ID: chart-title
+					60 text MSFT  · 1m
+				61 container
+					62 text Yahoo Finance  /  Constructed quote candles
+				63 container
+					64 text Zoom
+					65 pop up button (collapsed, settable) Description: Visible candles, Value: Latest 25, Secondary Actions: Expand
+						66 menu
+							67 All history
+							68 Latest 10
+							69 (selected) Latest 25
+							70 Latest 50
+							71 Latest 100
+				72 container
+					73 checkbox (settable, integer) Description: Follow latest candles, Value: 1
+					74 text Follow latest
+				75 button Fit chart to data
+				76 container Latest candle values
+					77 text O  90 H  90 L  90 C  90 Complete
+				78 container
+					79 checkbox (settable, integer) Description: Show SMA indicators, Value: 1
+					80 text SMA indicators
+				573 text SMA(20) 98.5 SMA(50) 99.4 Confirmed HOLD 2026-11-16 22:03:00 UTC Completed candles only · strategy execution is a separate opt-in
+				82 container MSFT 1m candlestick and volume chart
+					83 container
+						84 container Charting by TradingView
+							85 link Description: Charting by TradingView, Value: tradingview.com/?utm_medium=lwc-link&utm_campaign=lwc-chart&utm_source=127.0.0.1/, ID: tv-attr-logo
+					86 text VOLUME  54 reliable bars
+					566 text Only reliable interval volume is plotted. Missing values remain gaps.
+					88 container
+						89 text TradingView Lightweight Charts™ · Copyright (с) 2025 
+						90 link Description: TradingView, Inc., Value: tradingview.com/
+						91 text  · Time axis in UTC
+				92 text 54 saved / received candles  Stored provenance: simulated UTC · 1m · revisions preserved
+			93 button (collapsed) Market information & candle details Source timestamps, feed status, OHLC and provenance, Secondary Actions: Expand
+				94 AXListMarker ▸ 
+				95 text Market information & candle details
+				96 text Source timestamps, feed status, OHLC and provenance
+			97 container Simulated account
+				98 button (expanded) ▾ Simulated account · MSFT Cash $9,550.00, Secondary Actions: Collapse
+					99 text ▾
+					100 text Simulated account · MSFT
+					101 text Cash $9,550.00
+				102 text PAPER TRADING · SIMULATED · USD
+				103 heading Simulated account, Value: 2, ID: paper-title
+					104 text Simulated account
+				105 text Whole shares · zero fees/slippage · no real brokerage
+				106 button Refresh account
+				107 text Available cash
+				108 text $9,550.00
+				109 text Account equity
+				110 text $9,550.00
+				111 text Unrealized P/L
+				112 text $0.00
+				113 text Realized P/L
+				114 text -$450.00
+				115 text Starting balance
+				116 text $10,000.00
+				567 text MSFT · displayed reference
+				568 text $90.00
+				569 text Feed: unavailable · 2026-11-16T22:03:59.000000Z
+				120 container
+					121 text Your position:  0 shares
+				122 container Manual simulated order
+					570 text Manual SIMULATED order · MSFT
+					124 container
+						125 text Side
+						126 pop up button (collapsed, settable) Description: Paper order side, Value: BUY, Secondary Actions: Expand
+							127 menu
+								128 (selected) BUY
+								129 SELL
+					130 container
+						131 text Whole shares
+						132 stepper (settable, integer) Description: Paper order quantity, Value: 1
+					133 container
+						134 text Reference price · USD
+						135 stepper (settable) Paper execution price
+					136 button Use displayed price
+					137 checkbox (settable, integer) Description: Fill immediately, Value: 1
+					138 button Submit paper order
+				139 button (collapsed) Pricing & execution assumptions, Secondary Actions: Expand
+					140 text Pricing & execution assumptions
+			141 container Simulated positions and activity
+				142 button (expanded) ▾ Positions & execution history, Secondary Actions: Collapse
+					143 text ▾
+					144 text Positions & execution history
+				145 text SIMULATED ACCOUNT ACTIVITY
+				146 heading Positions & execution history, Value: 2
+					147 text Positions & execution history
+				148 link Description: Back to order ticket ↑, Value: 127.0.0.1:5174/#paper-title
+				149 container
+					150 button (expanded) Open positions, Secondary Actions: Collapse
+						151 text Open positions
+					152 table
+						153 row
+							154 cell
+								155 text Symbol
+							156 cell
+								157 text Shares
+							158 cell
+								159 text Avg entry
+							160 cell
+								161 text Cost basis
+							162 cell
+								163 text Saved price
+							164 cell
+								165 text Market value
+							166 cell
+								167 text Unrealized P/L
+							168 cell
+								169 text Quote · UTC / age / mode
+						170 row
+							171 cell
+								172 text No open simulated positions
+				173 container
+					174 button (expanded) Order history · latest 100, Secondary Actions: Collapse
+						175 text Order history · latest 100
+					176 table
+						177 row
+							178 cell
+								179 text Order
+							180 cell
+								181 text Symbol
+							182 cell
+								183 text Side
+							184 cell
+								185 text Shares
+							186 cell
+								187 text Reference
+							188 cell
+								189 text Status
+							190 cell
+								191 text Created · UTC
+							192 cell
+								193 text Manual action
+						194 row
+							195 cell
+								196 text #7
+							197 cell
+								198 text MSFT
+							199 cell
+								200 text SELL
+							201 cell
+								202 text 1
+							203 cell
+								204 text $90.00
+							205 cell
+								206 text filled
+							207 cell
+								208 text 2026-11-16T22:11:29.892621Z
+						209 row
+							210 cell
+								211 text #6
+							212 cell
+								213 text MSFT
+							214 cell
+								215 text BUY
+							216 cell
+								217 text 1
+							218 cell
+								219 text $80.00
+							220 cell
+								221 text filled
+							222 cell
+								223 text 2026-11-16T22:11:29.476959Z
+						224 row
+							225 cell
+								226 text #5
+							227 cell
+								228 text AAPL
+							229 cell
+								230 text SELL
+							231 cell
+								232 text 16
+							233 cell
+								234 text $90.00
+							235 cell
+								236 text filled
+							237 cell
+								238 text 2026-11-16T22:03:02.000000Z
+						239 row
+							240 cell
+								241 text #4
+							242 cell
+								243 text AAPL
+							244 cell
+								245 text BUY
+							246 cell
+								247 text 16
+							248 cell
+								249 text $125.00
+							250 cell
+								251 text filled
+							252 cell
+								253 text 2026-11-16T22:01:02.000000Z
+						254 row
+							255 cell
+								256 text #3
+							257 cell
+								258 text AAPL
+							259 cell
+								260 text SELL
+							261 cell
+								262 text 1
+							263 cell
+								264 text $110.00
+							265 cell
+								266 text rejected insufficient shares
+							267 cell
+								268 text 2026-11-16T22:03:54.545370Z
+						269 row
+							270 cell
+								271 text #2
+							272 cell
+								273 text AAPL
+							274 cell
+								275 text SELL
+							276 cell
+								277 text 10
+							278 cell
+								279 text $110.00
+							280 cell
+								281 text filled
+							282 cell
+								283 text 2026-11-16T22:03:54.162151Z
+						284 row
+							285 cell
+								286 text #1
+							287 cell
+								288 text AAPL
+							289 cell
+								290 text BUY
+							291 cell
+								292 text 10
+							293 cell
+								294 text $100.00
+							295 cell
+								296 text filled
+							297 cell
+								298 text 2026-11-16T22:03:36.886450Z
+				299 container
+					300 button (expanded) Fill / trade history · latest 100, Secondary Actions: Collapse
+						301 text Fill / trade history · latest 100
+					302 table
+						303 row
+							304 cell
+								305 text Fill / order
+							306 cell
+								307 text Symbol / side
+							308 cell
+								309 text Shares
+							310 cell
+								311 text Fill price
+							312 cell
+								313 text Fees
+							314 cell
+								315 text Slippage
+							316 cell
+								317 text Execution source
+							318 cell
+								319 text Realized P/L
+							320 cell
+								321 text Executed · UTC
+						322 row
+							323 cell
+								324 text #6 / #7
+							325 cell
+								326 text MSFT SELL
+							327 cell
+								328 text 1
+							329 cell
+								330 text $90.00
+							331 cell
+								332 text $0.00
+							333 cell
+								334 text 0 bps
+							335 cell
+								336 text manual_reference
+							337 cell
+								338 text $10.00
+							339 cell
+								340 text 2026-11-16T22:11:29.894065Z
+						341 row
+							342 cell
+								343 text #5 / #6
+							344 cell
+								345 text MSFT BUY
+							346 cell
+								347 text 1
+							348 cell
+								349 text $80.00
+							350 cell
+								351 text $0.00
+							352 cell
+								353 text 0 bps
+							354 cell
+								355 text manual_reference
+							356 cell
+								357 text $0.00
+							358 cell
+								359 text 2026-11-16T22:11:29.477897Z
+						360 row
+							361 cell
+								362 text #4 / #5
+							363 cell
+								364 text AAPL SELL
+							365 cell
+								366 text 16
+							367 cell
+								368 text $90.00
+							369 cell
+								370 text $0.00
+							371 cell
+								372 text 0 bps
+							373 cell
+								374 text observed_quote  · observation #228
+							375 cell
+								376 text -$560.00
+							377 cell
+								378 text 2026-11-16T22:03:02.000000Z
+						379 row
+							380 cell
+								381 text #3 / #4
+							382 cell
+								383 text AAPL BUY
+							384 cell
+								385 text 16
+							386 cell
+								387 text $125.00
+							388 cell
+								389 text $0.00
+							390 cell
+								391 text 0 bps
+							392 cell
+								393 text observed_quote  · observation #214
+							394 cell
+								395 text $0.00
+							396 cell
+								397 text 2026-11-16T22:01:02.000000Z
+						398 row
+							399 cell
+								400 text #2 / #2
+							401 cell
+								402 text AAPL SELL
+							403 cell
+								404 text 10
+							405 cell
+								406 text $110.00
+							407 cell
+								408 text $0.00
+							409 cell
+								410 text 0 bps
+							411 cell
+								412 text manual_reference
+							413 cell
+								414 text $100.00
+							415 cell
+								416 text 2026-11-16T22:03:54.163124Z
+						417 row
+							418 cell
+								419 text #1 / #1
+							420 cell
+								421 text AAPL BUY
+							422 cell
+								423 text 10
+							424 cell
+								425 text $100.00
+							426 cell
+								427 text $0.00
+							428 cell
+								429 text 0 bps
+							430 cell
+								431 text manual_reference
+							432 cell
+								433 text $0.00
+							434 cell
+								435 text 2026-11-16T22:03:36.887226Z
+			436 container Observation information
+				437 button (expanded) ▾ Observation information, Secondary Actions: Collapse
+					438 text ▾
+					439 text Observation information
+				440 text LATEST OBSERVATION No raw observation received SOURCE IDENTITY
+				571 text —
+				442 text REGULAR SESSION outside regular hours
+			443 container Market replay Select Replay mode
+				444 button (expanded) ▾ Market replay Inactive · live mode, Secondary Actions: Collapse
+					445 text ▾
+					446 text Market replay
+					447 text Inactive · live mode
+				448 text HISTORICAL WORKSPACE
+				449 heading Market replay Select Replay mode, Value: 2, ID: replay-title
+					450 text Market replay  Select Replay mode
+				451 text Switch to Replay to enable playback of saved observations.
+				452 button Open replay
+				453 button (disabled) Play replay
+				454 button (disabled) Pause replay
+				455 button (disabled) Resume replay
+				456 button (disabled) Restart replay
+				457 button (disabled) Stop replay
+				458 container
+					459 text Start · UTC
+					460 date field (disabled, settable) Replay start UTC
+				461 container
+					462 text End · UTC (exclusive)
+					463 date field (disabled, settable) Replay end UTC
+				464 container
+					465 text Ordering
+					466 pop up button (disabled, collapsed, settable) Description: Replay ordering, Value: Receipt time + ID, Secondary Actions: Expand
+						467 menu
+							468 (disabled) Receipt time + ID
+							469 (disabled) Commit arrival ID
+				470 container
+					471 text Speed
+					472 pop up button (disabled, collapsed, settable) Description: Replay speed, Value: 10×, Secondary Actions: Expand
+						473 menu
+							474 (disabled) 0.25×
+							475 (disabled) 0.5×
+							476 (disabled) 1×
+							477 (disabled) 2×
+							478 (disabled) 5×
+							479 (disabled) 10×
+							480 (disabled) 25×
+							481 (disabled) 50×
+							482 (disabled) 100×
+				483 button (disabled) Load replay selection
+				484 progress indicator Description: Replay progress, Value: 0
+				485 text Live mode · replay inactive
+			486 container SMA(20) / SMA(50) crossover strategy
+				487 button (expanded) ▾ SMA crossover strategy Automatic simulation OFF, Secondary Actions: Collapse
+					488 text ▾
+					489 text SMA crossover strategy
+					490 text Automatic simulation OFF
+				491 text AUTOMATIC PAPER TRADING · SIMULATED ONLY
+				492 heading SMA(20) / SMA(50) crossover strategy, Value: 2, ID: strategy-title
+					493 text SMA(20) / SMA(50) crossover strategy
+				494 text BUY: up to20% of cash, whole shares · SELL: this strategy's entire holding · zero fees/slippage
+				495 button Toggle automatic simulated trading
+				496 text Automatic SIMULATED trading
+				497 text OFF · disabled
+				498 text Configured symbol / interval
+				499 text AAPL · 1m
+				500 text Current account cash
+				501 text $9,550.00
+				502 text Last-known account equity
+				503 text $9,550.00
+				504 text Strategy-owned shares
+				505 text 0
+				506 container
+					507 text Strategy status reason:  automatic simulation off
+				508 container
+					509 text Last confirmed signal:  SELL · AAPL 1m · candle 2026-11-16T22:02:00.000000Z
+					510 text SMA20 99.0 / SMA50 99.6 · available 2026-11-16T22:03:00.500000Z
+				511 container
+					512 text Latest decision:  executed · first eligible observed price
+				513 container
+					514 text Last simulated action:  executed · first eligible observed price
+					515 text Quantity 16 · observed price $90.00 · observation #228 · order #5 · fill #4
+				516 container
+					517 text Account after that action:  cash $9,540.00 · AAPL shares 0 · realized P/L -$460.00
+				518 text Default OFF. Enabling starts with future completed candles; it does not trade saved crossings. Execution waits for a later fresh observed price. Disabling cancels waiting signals but does not liquidate holdings. Manual shares are protected.
+				519 container
+					520 text Arrow BUY/SELL = analytical crossover  ·  Circle SIM BUY/SELL = actual paper fill  · Backtests use separate accounts · No real brokerage.
+			521 container SMA crossover backtesting
+				522 button (expanded) ▾ Historical backtesting Isolated simulated account, Secondary Actions: Collapse
+					523 text ▾
+					524 text Historical backtesting
+					574 text Isolated simulated account
+				526 text HISTORICAL BACKTEST · ISOLATED SIMULATED ACCOUNT
+				527 heading SMA crossover backtesting, Value: 2, ID: backtest-title
+					528 text SMA crossover backtesting
+				572 text Stored candles only · MSFT / 1m · no changes to your live paper account
+				530 container
+					531 text Start date (UTC)
+					532 date field (settable) Description: Backtest start date, Value: 2026-11-16
+						533 container
+							534 stepper
+							535 stepper
+							536 stepper
+						537 pop up button Show date picker Show date picker
+					538 text End date (UTC, exclusive)
+					539 date field (settable) Description: Backtest end date, Value: 2026-11-17
+						540 container
+							541 stepper
+							542 stepper
+							543 stepper
+						544 pop up button Show date picker Show date picker
+					545 text Starting cash ($)
+					546 stepper (settable, integer) Description: Backtest starting balance, Value: 10000
+					547 text Fast SMA
+					548 stepper (settable, integer) Description: Backtest fast SMA, Value: 20
+					549 text Slow SMA
+					550 stepper (settable, integer) Description: Backtest slow SMA, Value: 50
+					551 text Candle origin
+					552 pop up button (collapsed, settable) Description: Backtest candle origin, Value: Locally constructed, Secondary Actions: Expand
+						553 menu
+							554 (selected) Locally constructed
+							555 Provider historical OHLCV
+					556 button Run Backtest
+				575 container
+					576 text BACKTEST · SIMULATED  #2 · MSFT 1m · SMA 20/50 · 2026-11-16T00:00:00.000000Z → 2026-11-17T00:00:00.000000Z
+				577 text Starting equity
+				578 text $10,000.00
+				579 text Ending equity
+				580 text $9,440.00
+				581 text Total return
+				582 text -5.60%
+				583 text Realized P/L
+				584 text -$560.00
+				585 text Unrealized P/L
+				586 text $0.00
+				587 text Completed round trips / fills
+				588 text 1 / 2
+				589 text Win rate (closed trades)
+				590 text 0.00%
+				591 text Maximum drawdown
+				592 text 7.20%
+				593 container
+					594 text Equity at recorded open / completion events · USD · $9,280.00–$10,000.00
+					595 image Backtest equity curve
+					596 text 2026-11-16T21:10:00.000000Z 2026-11-16T22:04:00.000000Z
+				597 text Excluded incomplete rows: 0 · later completed versions: 0 · missing interval slots: 0 (may include market closures). No warm-up before start.
+				598 container
+					599 button (expanded) Simulated fill history (2), Secondary Actions: Collapse
+						600 text Simulated fill history (2)
+					601 table
+						602 row
+							603 cell
+								604 text Execution UTC
+							605 cell
+								606 text Side
+							607 cell
+								608 text Shares
+							609 cell
+								610 text Open price
+							611 cell
+								612 text Signal candle → execution candle
+						613 row
+							614 cell
+								615 text 2026-11-16T22:01:00.000000Z
+							616 cell
+								617 text BUY
+							618 cell
+								619 text 16
+							620 cell
+								621 text $125.00
+							622 cell
+								623 text #202 → #204
+						624 row
+							625 cell
+								626 text 2026-11-16T22:03:00.000000Z
+							627 cell
+								628 text SELL
+							629 cell
+								630 text 16
+							631 cell
+								632 text $90.00
+							633 cell
+								634 text #206 → #208
+				635 container
+					636 button (expanded) Completed trade history (1), Secondary Actions: Collapse
+						637 text Completed trade history (1)
+					638 table
+						639 row
+							640 cell
+								641 text Entry UTC
+							642 cell
+								643 text Exit UTC
+							644 cell
+								645 text Shares
+							646 cell
+								647 text Entry / exit
+							648 cell
+								649 text Realized P/L
+						650 row
+							651 cell
+								652 text 2026-11-16T22:01:00.000000Z
+							653 cell
+								654 text 2026-11-16T22:03:00.000000Z
+							655 cell
+								656 text 16
+							657 cell
+								658 text $125.00 / $90.00
+							659 cell
+								660 text -$560.00
+				661 text Unfilled final signals: 0 · Input fingerprint 53d3699ad9b579261b69753edc329c8d7188df9f308c5286bbd726c110d6b60d
+				558 text Execution: next eligible completed candle open after confirmation availability; whole shares, 20% cash allocation, long-only, zero commissions/slippage. First completed revision only. Missing candles are never synthesized. No liquidity/spread/market impact model. Historical results do not guarantee future returns; gaps, survivorship bias and parameter overfitting can distort results.
+			559 text MarketPulse · Assignment 4.2 Observation integrity first.
+
+The focused UI element is 1 AXWebArea MarketPulse | Market workstation, URL: 127.0.0.1:5174/

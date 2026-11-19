@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-12",
+  "environment": "/private/tmp/marketpulse-final-review; existing dependencies; matched workspace source",
+  "backend": {
+    "passed": 204,
+    "failed": 0,
+    "warnings": 1,
+    "seconds": 6.3
+  },
+  "frontend": {
+    "passed": 42,
+    "failed": 0,
+    "files": 11
+  },
+  "build": "passed",
+  "pip_check": "No broken requirements found",
+  "source_comparison": {
+    "files": 74,
+    "differences": []
+  },
+  "reference": {
+    "datasets": 6,
+    "points": 360,
+    "absolute_tolerance_usd": 1e-09,
+    "max_absolute_error_usd": 2.3283064365386963e-10
+  },
+  "browser": {
+    "outcome": "unavailable",
+    "reason": "native pipe path unavailable",
+    "visual_verification": false
+  },
+  "github_actions": {
+    "workflow": ".github/workflows/ci.yml",
+    "local_yaml_validation": "passed",
+    "hosted_run": "not executed in this stage"
+  },
+  "data_kind": "synthetic deterministic fixtures; no new live-provider probe",
+  "main_account_test_orders": 0
+}

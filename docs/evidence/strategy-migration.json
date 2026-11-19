@@ -1,0 +1,64 @@
+{
+  "date": "2026-11-12",
+  "mode": "SIMULATED",
+  "before": {
+    "observations": {
+      "count": 89807,
+      "sha256": "49d25b4ecb20976f4280327857c3cc28161fb4640a155bba5db62a0836fe63c4"
+    },
+    "simulated_accounts": {
+      "count": 1,
+      "sha256": "8c3dcf76d113d1c25acc742de1273c7d403dee082bb510100baf671d8a74f688"
+    },
+    "paper_orders": {
+      "count": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "paper_fills": {
+      "count": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "paper_positions": {
+      "count": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "after_two_initializations": {
+    "observations": {
+      "count": 89807,
+      "sha256": "49d25b4ecb20976f4280327857c3cc28161fb4640a155bba5db62a0836fe63c4"
+    },
+    "simulated_accounts": {
+      "count": 1,
+      "sha256": "8c3dcf76d113d1c25acc742de1273c7d403dee082bb510100baf671d8a74f688"
+    },
+    "paper_orders": {
+      "count": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "paper_fills": {
+      "count": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "paper_positions": {
+      "count": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "original_market_and_account_rows_preserved": true,
+  "automatic_trading_enabled": false,
+  "signals": 0,
+  "no_user_account_test_orders_executed": true,
+  "audit": {
+    "ok": true,
+    "sqlite_integrity": [
+      "ok"
+    ],
+    "foreign_key_violations": 0,
+    "revision_gap_groups": 0,
+    "invalid_metadata_ids": [],
+    "invalid_metadata_count": 0,
+    "observation_count": 89807
+  },
+  "notes": "Legacy fill CHECK widened transactionally; original fill IDs/values and accounting retained; strategy defaults OFF."
+}

@@ -1,24 +1,26 @@
 import { describe, expect, it, vi } from 'vitest'
 import { createChartRenderer } from '../src/services/chartRenderer.js'
+const markerMocks = vi.hoisted(() => ({setMarkers:vi.fn()}))
+vi.mock('lightweight-charts', async original => ({...await original(),createSeriesMarkers:()=>markerMocks}))
 import { candle, nextCandle } from './chartFixture.js'
-function harness() {
-  const series = [0, 1].map(() => ({ setData: vi.fn(), update: vi.fn() }))
+function harness(onSignalSelect=vi.fn()) {
+  const series = [0, 1, 2, 3].map(() => ({ setData: vi.fn(), update: vi.fn() }))
   const scale = { setVisibleLogicalRange: vi.fn(), fitContent: vi.fn(), getVisibleRange: vi.fn(() => ({ from: 1, to: 2 })), setVisibleRange: vi.fn() }
-  const chart = { addSeries: vi.fn().mockReturnValueOnce(series[0]).mockReturnValueOnce(series[1]),
+  const chart = { addSeries: vi.fn().mockReturnValueOnce(series[0]).mockReturnValueOnce(series[1]).mockReturnValueOnce(series[2]).mockReturnValueOnce(series[3]),
     panes: () => [{ setStretchFactor: vi.fn() }, { setStretchFactor: vi.fn() }],
-    timeScale: () => scale, resize: vi.fn(), remove: vi.fn() }
+    subscribeClick:vi.fn(),unsubscribeClick:vi.fn(),subscribeCrosshairMove:vi.fn(),unsubscribeCrosshairMove:vi.fn(),timeScale: () => scale, resize: vi.fn(), remove: vi.fn() }
   const factory = vi.fn(() => chart)
   const container = document.createElement('div')
   Object.defineProperty(container, 'clientWidth', { value: 800 })
   Object.defineProperty(container, 'clientHeight', { value: 500 })
-  return { renderer: createChartRenderer(container, factory), factory, chart, series, scale }
+  return { renderer: createChartRenderer(container, factory,{onSignalSelect}),onSignalSelect, factory, chart, series, scale }
 }
 describe('TradingView renderer adapter', () => {
   it('initializes price and aligned volume panes from saved candles', () => {
     const h = harness()
     h.renderer.apply([candle(), nextCandle({ volume: 50, metadata: { volume_reliable: true } })], 'AAPL:1m')
     expect(h.factory).toHaveBeenCalledWith(expect.any(HTMLElement), expect.objectContaining({ autoSize: false, width: 800, height: 500 }))
-    expect(h.chart.addSeries.mock.calls.map(call => call[2])).toEqual([0, 1])
+    expect(h.chart.addSeries.mock.calls.map(call => call[2])).toEqual([0, 1, 0, 0])
     expect(h.series[0].setData.mock.calls[0][0][0]).toMatchObject({ time: 1767711600, open: 100, close: 102 })
     expect(h.series[1].setData.mock.calls[0][0][0]).toEqual({ time: 1767711600 })
     expect(h.series[1].setData.mock.calls[0][0][1].value).toBe(50)
@@ -78,4 +80,44 @@ it('zooms to recent candles, follows updates and releases the viewport for manua
   h.renderer.focus(25)
   h.renderer.apply([candle()],'MSFT:5m')
   expect(h.scale.setVisibleLogicalRange).toHaveBeenLastCalledWith({from:-.5,to:2.5})
+})
+
+it('renders distinct SMA lines and confirmed markers and clears them when hidden',()=>{
+  const h=harness()
+  h.renderer.apply([candle({candle_complete:true})],'AAPL:1m')
+  const point={...candle({candle_complete:true}),candle_open_timestamp:'2026-01-06T15:00:00Z',sma20:105,sma50:100,signal:'BUY',confirmed:true,signal_id:'stable'}
+  h.renderer.indicators({points:[point],signals:[point]})
+  expect(h.series[2].setData).toHaveBeenLastCalledWith([{time:1767711600,value:105}])
+  expect(h.series[3].setData).toHaveBeenLastCalledWith([{time:1767711600,value:100}])
+  expect(markerMocks.setMarkers).toHaveBeenLastCalledWith([expect.objectContaining({id:'stable',shape:'arrowUp',text:'BUY'})])
+  h.renderer.indicators({points:[point],signals:[point]},false)
+  expect(h.series[2].setData).toHaveBeenLastCalledWith([])
+  expect(markerMocks.setMarkers).toHaveBeenLastCalledWith([expect.objectContaining({text:'BUY'})])
+  h.renderer.indicators({points:[point],signals:[point]},false,[],{showSignals:false})
+  expect(markerMocks.setMarkers).toHaveBeenLastCalledWith([])
+})
+
+it('distinguishes paper fills from signal arrows and filters other symbol/interval fills',()=>{
+ const h=harness();h.renderer.apply([candle({candle_complete:true})],'live:AAPL:1m')
+ const point={...candle({candle_complete:true}),candle_open_timestamp:'2026-01-06T15:00:00Z',signal:'BUY',confirmed:true,signal_id:'signal'}
+ const fill={id:8,symbol:'AAPL',interval:'1m',side:'BUY',quantity:16,source_timestamp:'2026-01-06T15:00:20Z'}
+ h.renderer.indicators({points:[],signals:[point]},true,[fill,{...fill,id:9,symbol:'MSFT'},{...fill,id:10,interval:'5m'}])
+ expect(markerMocks.setMarkers.mock.calls.at(-1)[0]).toEqual(expect.arrayContaining([
+  expect.objectContaining({shape:'arrowUp',text:'BUY'}),expect.objectContaining({shape:'circle',text:'FILL BUY 16',id:'paper-fill:8'})]))
+ expect(markerMocks.setMarkers.mock.calls.at(-1)[0]).toHaveLength(2)
+})
+
+
+it('selects signals on marker hover or candle click and removes handlers cleanly',()=>{
+ const h=harness(),row=candle({candle_complete:true})
+ const point={...row,signal:'SELL',signal_id:'sell-id',confirmed:true,sma20:99,sma50:99.6}
+ h.renderer.apply([row],'replay:2:AAPL:1m');h.renderer.indicators({points:[point],signals:[point,point]})
+ expect(markerMocks.setMarkers.mock.calls.at(-1)[0]).toEqual([expect.objectContaining({id:'sell-id',shape:'arrowDown',position:'aboveBar',text:'SELL',time:1767711600})])
+ h.chart.subscribeCrosshairMove.mock.calls[0][0]({hoveredObjectId:'sell-id'})
+ expect(h.onSignalSelect).toHaveBeenLastCalledWith('sell-id')
+ h.chart.subscribeClick.mock.calls[0][0]({time:1767711600})
+ expect(h.onSignalSelect).toHaveBeenLastCalledWith('sell-id')
+ h.renderer.apply([],'live:MSFT:5m')
+ expect(h.onSignalSelect).toHaveBeenLastCalledWith(null)
+ h.renderer.remove();expect(h.chart.unsubscribeClick).toHaveBeenCalled();expect(h.chart.unsubscribeCrosshairMove).toHaveBeenCalled()
 })

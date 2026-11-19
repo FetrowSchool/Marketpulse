@@ -1,0 +1,36 @@
+{
+  "verification_date": "2026-11-12",
+  "provenance": "Read-only saved actual Yahoo constructed candles; not fresh live-provider verification",
+  "symbol": "AAPL",
+  "interval": "1m",
+  "snapshot_max_id": 69460,
+  "completed_count": 248,
+  "signal_count": 5,
+  "latest": {
+    "symbol": "AAPL",
+    "data_source": "yahoo_finance",
+    "data_mode": "delayed",
+    "observation_type": "constructed_candle",
+    "source_observation_id": "quote-candle-v1:delayed:1m:2026-11-12T17:35:00.000000Z",
+    "candle_interval": "1m",
+    "candle_open_timestamp": "2026-11-12T17:35:00.000000Z",
+    "source_timestamp": "2026-11-12T17:35:58.000000Z",
+    "received_timestamp": "2026-11-12T17:36:00.148519Z",
+    "revision": 31,
+    "id": 68552,
+    "candle_complete": true,
+    "sma20": 355.6211,
+    "sma50": 355.63564,
+    "signal": "HOLD",
+    "confirmed": true,
+    "reason": "no_crossover",
+    "signal_id": "526e28b27a354796c48ee166565d44a2eb51c7d08dfc8b2eaf04964c83a8f354"
+  },
+  "independent_fraction_reference": {
+    "sma20": 355.6211,
+    "sma50": 355.63564
+  },
+  "matches_reference": true,
+  "signal_ids_unique": true,
+  "browser_verification": "Unavailable: automation native pipe connection absent after reset"
+}

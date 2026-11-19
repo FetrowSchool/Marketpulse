@@ -1,0 +1,56 @@
+{
+  "date": "2026-11-16",
+  "environment": "/private/tmp/marketpulse-verification-20261116",
+  "results": [
+    {
+      "check": "backend",
+      "command": [
+        "../.venv/bin/python",
+        "-m",
+        "pytest",
+        "--junitxml=<workspace>/docs/evidence/2026-11-16/backend-junit.xml"
+      ],
+      "cwd": "/private/tmp/marketpulse-verification-20261116/backend",
+      "exit_code": 0,
+      "elapsed_seconds": 5.465
+    },
+    {
+      "check": "sma-reference",
+      "command": [
+        "../.venv/bin/python",
+        "scripts/verify_references.py",
+        "--output",
+        "<workspace>/docs/evidence/2026-11-16/sma-reference.json"
+      ],
+      "cwd": "/private/tmp/marketpulse-verification-20261116/backend",
+      "exit_code": 0,
+      "elapsed_seconds": 0.228
+    },
+    {
+      "check": "frontend",
+      "command": [
+        "npm",
+        "test"
+      ],
+      "cwd": "/private/tmp/marketpulse-verification-20261116/frontend",
+      "exit_code": 0,
+      "elapsed_seconds": 2.418
+    },
+    {
+      "check": "build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "cwd": "/private/tmp/marketpulse-verification-20261116/frontend",
+      "exit_code": 0,
+      "elapsed_seconds": 0.723
+    }
+  ],
+  "source_files": 87,
+  "source_changes_during_checks": [],
+  "report_sha256_unchanged": "97718b1ce455461c2610d5427183aaa2f266149cbff538fe0070138f992f6a74",
+  "data": "deterministic fixtures and temporary databases; no live feed dependency",
+  "hosted_ci_run": false
+}

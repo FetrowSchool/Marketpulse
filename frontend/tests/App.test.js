@@ -181,3 +181,55 @@ it('offers automatic recent-candle zoom, follow toggle, fit-all and direct repla
   expect(wrapper.get('select[aria-label="Data mode"]').element.value).toBe('replay')
   expect(FakeWebSocket.sockets.at(-1).url).toContain('/ws/replay')
 })
+
+it('refreshes backend indicator snapshots on completion and exposes visibility/status controls',async()=>{
+  vi.useFakeTimers()
+  const baseFetch=globalThis.fetch
+  vi.stubGlobal('fetch',vi.fn(async(url,options)=>{
+    if(url==='/api/indicators/evaluate') {
+      const body=JSON.parse(options.body),last=body.candles.at(-1)
+      return {ok:true,json:async()=>({symbol:body.symbol,interval:body.interval,points:[],signals:[],latest:last?.candle_complete
+        ? {...last,sma20:100,sma50:99,signal:'BUY',confirmed:true} : null})}
+    }
+    return baseFetch(url,options)
+  }))
+  const socket=await mounted()
+  socket.emit(frame('candle_update',socket,'AAPL',{data:candle()}))
+  await vi.advanceTimersByTimeAsync(100)
+  expect(wrapper.get('[data-testid="crossover-status"]').text()).toContain('waiting')
+  socket.emit(frame('candle_completed',socket,'AAPL',{data:candle({id:3,revision:2,candle_complete:true})}))
+  await vi.advanceTimersByTimeAsync(100)
+  expect(wrapper.get('[data-testid="crossover-status"]').text()).toContain('Confirmed BUY')
+  await wrapper.get('input[aria-label="Show SMA indicators"]').setValue(false)
+  expect(wrapper.get('input[aria-label="Show SMA indicators"]').element.checked).toBe(false)
+})
+
+it('requests Yahoo recovery explicitly, reports errors and disables it in replay',async()=>{
+ const original=globalThis.fetch
+ let fail=true
+ vi.stubGlobal('fetch',vi.fn(async(url,options)=>url==='/api/market/reconnect'
+  ? {ok:!fail,json:async()=>fail?{detail:'Market database unavailable'}:{requested:true,feed_status:{state:'connecting'}}}
+  : original(url,options)))
+ await mounted()
+ expect(fetch.mock.calls.filter(([url])=>url==='/api/market/reconnect')).toHaveLength(0)
+ await wrapper.get('[aria-label="Reconnect Yahoo feed"]').trigger('click');await flushPromises()
+ expect(wrapper.text()).toContain('Market database unavailable')
+ fail=false
+ await wrapper.get('[aria-label="Reconnect Yahoo feed"]').trigger('click');await flushPromises()
+ expect(wrapper.text()).toContain('Yahoo connection requested')
+ expect(fetch.mock.calls.filter(([url])=>url==='/api/market/reconnect').every(([,options])=>options.method==='POST')).toBe(true)
+ await wrapper.get('select[aria-label="Data mode"]').setValue('replay')
+ expect(wrapper.get('[aria-label="Reconnect Yahoo feed"]').element.disabled).toBe(true)
+})
+
+it('keeps crossover visibility independent of SMA lines and simulated fills', async () => {
+  await mounted()
+  const controls = ['Show Crossover Signals','Show SMA indicators','Show Simulated Fills']
+  for (const label of controls) expect(wrapper.get(`[aria-label="${label}"]`).element.checked).toBe(true)
+  await wrapper.get('[aria-label="Show Crossover Signals"]').setValue(false)
+  const chart=wrapper.findComponent({name:'MarketChart'})
+  expect(chart.props('showSignals')).toBe(false)
+  expect(chart.props('showIndicators')).toBe(true)
+  expect(chart.props('showFills')).toBe(true)
+  expect(fetch.mock.calls.every(([,options])=>!options?.method || options.method==='GET')).toBe(true)
+})

@@ -1,6 +1,7 @@
-"""Validated, read-only market API. No chart or broadcast transport."""
+"""Validated market reads and explicit shared-feed recovery."""
 import sqlite3
 from enum import Enum
+from app.services.market_data import PersistenceFailure
 from fastapi import APIRouter, HTTPException, Query, Request
 
 router = APIRouter(prefix="/api/market", tags=["market"])
@@ -23,6 +24,17 @@ class Interval(str, Enum):
 def market_status(request: Request):
     service = request.app.state.market
     return service.status.snapshot(service.clock())
+
+
+@router.post('/reconnect', status_code=202)
+async def reconnect_market(request: Request):
+    origin = request.headers.get('origin')
+    if origin and origin not in request.app.state.settings.cors_origins:
+        raise HTTPException(403, 'Origin is not allowed to control the market feed')
+    try:
+        return await request.app.state.market.reconnect()
+    except PersistenceFailure as exc:
+        raise HTTPException(503, 'Market database unavailable. Feed remains stopped; retry after storage recovers.') from exc
 
 
 @router.get("/symbols")

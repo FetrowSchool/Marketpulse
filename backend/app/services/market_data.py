@@ -113,6 +113,8 @@ class MarketDataService:
         self.tasks = []
         self.stopping = False
         self.stream = None
+        self._restart_lock = asyncio.Lock()
+        self._last_restart_at = None
 
     def snapshot(self, symbol=None):
         symbol = symbol or self.settings.active_symbol
@@ -127,6 +129,8 @@ class MarketDataService:
         return status.snapshot(self.clock())
 
     def start(self):
+        if any(not task.done() for task in self.tasks):
+            return
         if not self.settings.feed_enabled:
             self.status.last_error = "feed_disabled"
             return
@@ -142,6 +146,34 @@ class MarketDataService:
         self.status.connected = False
         if not self.status.database_error:
             self.status.state = "disconnected"
+
+    async def reconnect(self):
+        """Explicit user recovery of the one shared provider session, not browser sockets."""
+        async with self._restart_lock:
+            loop = asyncio.get_running_loop()
+            if self._last_restart_at is not None and loop.time() - self._last_restart_at < 3:
+                return {'requested': False, 'feed_status': self.snapshot()}
+            await self.stop()  # Cancels completion too; waits for pending transactions/close.
+            self.tasks = []
+            try:
+                await database_work(self._check_restart_storage)
+            except (sqlite3.Error, OSError):
+                self.database_failed()
+                raise PersistenceFailure('Market database is still unavailable') from None
+            self.settings = replace(self.settings, feed_enabled=True)
+            self.status.settings = self.settings
+            self.status.database_error = False
+            self.status.last_error = None
+            self.status.consecutive_failures = 0
+            self.stopping = False
+            self.start()
+            self._last_restart_at = loop.time()
+            return {'requested': True, 'feed_status': self.snapshot()}
+
+    def _check_restart_storage(self):
+        # Acquire the same write lock as ingestion without changing any market/account row.
+        with self.repository.database.transaction() as connection:
+            connection.execute('SELECT id FROM observations LIMIT 1').fetchone()
 
     def database_failed(self):
         logger.error("Market data persistence failed; feed stopped")

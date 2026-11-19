@@ -56,14 +56,55 @@ class Database:
 
     def initialize(self):
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        schema = Path(__file__).resolve().parents[1].joinpath("schema.sql").read_text()
+        schema_dir = Path(__file__).resolve().parents[1]
+        schema = schema_dir.joinpath("schema.sql").read_text()
+        schema += "\n" + schema_dir.joinpath("paper_schema.sql").read_text()
         with closing(self.connect()) as conn:
             conn.execute("PRAGMA journal_mode = WAL")
             try:
-                conn.executescript("BEGIN IMMEDIATE;\n" + schema + "\nCOMMIT;")
+                conn.execute("BEGIN IMMEDIATE")
+                self._execute_schema(conn, schema)
+                self._upgrade_fill_sources(conn, schema_dir.joinpath("paper_schema.sql").read_text())
+                self._execute_schema(conn, schema_dir.joinpath("strategy_schema.sql").read_text())
+                self._execute_schema(conn, schema_dir.joinpath("backtest_schema.sql").read_text())
+                conn.execute("INSERT OR IGNORE INTO strategy_config(id,enabled,symbol,interval,updated_timestamp) VALUES(1,0,'AAPL','1m',?)",
+                             (utc_timestamp(datetime.now(timezone.utc)),))
+                conn.execute("""INSERT OR IGNORE INTO simulated_accounts
+                    (id,label,currency,starting_cash_units,cash_units,realized_pl_units,created_timestamp)
+                    VALUES(1,'SIMULATED','USD',10000000000,10000000000,0,?)""",
+                    (utc_timestamp(datetime.now(timezone.utc)),))
+                conn.commit()
             except Exception:
                 conn.rollback()
                 raise
+
+    @staticmethod
+    def _execute_schema(conn, schema):
+        # Unlike executescript(), this does not implicitly commit an open migration.
+        statement = ''
+        for line in schema.splitlines(keepends=True):
+            statement += line
+            if sqlite3.complete_statement(statement):
+                conn.execute(statement)
+                statement = ''
+        if statement.strip():
+            raise ValueError('Incomplete schema statement')
+
+    def _upgrade_fill_sources(self, conn, paper_schema):
+        sql = conn.execute("SELECT sql FROM sqlite_master WHERE name='paper_fills'").fetchone()[0]
+        if 'observed_quote' in sql:
+            return
+        # Existing immutable fills retain every ID/value; only the allowed source changes.
+        conn.execute('DROP TRIGGER IF EXISTS paper_fills_no_update')
+        conn.execute('DROP TRIGGER IF EXISTS paper_fills_no_delete')
+        conn.execute('DROP INDEX IF EXISTS idx_paper_fills_history')
+        conn.execute('ALTER TABLE paper_fills RENAME TO paper_fills_legacy')
+        start = paper_schema.index('CREATE TABLE IF NOT EXISTS paper_fills (')
+        end = paper_schema.index(';', start) + 1
+        conn.execute(paper_schema[start:end])
+        conn.execute('INSERT INTO paper_fills SELECT * FROM paper_fills_legacy')
+        conn.execute('DROP TABLE paper_fills_legacy')
+        self._execute_schema(conn, paper_schema)
 
     def is_connected(self):
         try:

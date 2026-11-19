@@ -1,0 +1,13 @@
+
+> marketpulse@0.1.0 build
+> vite build
+
+vite v7.3.7 building client environment for production...
+transforming...
+✓ 28 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.42 kB │ gzip:   0.29 kB
+dist/assets/index-BIC09ZKh.css   22.51 kB │ gzip:   5.55 kB
+dist/assets/index-BT0uvva-.js   319.89 kB │ gzip: 108.56 kB
+✓ built in 453ms

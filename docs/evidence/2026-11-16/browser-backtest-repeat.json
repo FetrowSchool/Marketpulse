@@ -1,0 +1,1928 @@
+{
+  "id": 2,
+  "assumptions": {
+    "allocation_percent": 20,
+    "availability": "max(candle end, recorded receipt timestamp)",
+    "execution": "Next eligible completed candle open after signal availability; never signal close",
+    "fees": "0",
+    "liquidity": "Whole order filled at recorded open; no spread, market impact or liquidity model",
+    "long_only": true,
+    "mode": "BACKTEST \u00b7 SIMULATED",
+    "revisions": "First completed revision only; later corrections excluded",
+    "slippage_bps": 0,
+    "whole_shares": true
+  },
+  "configuration": {
+    "candle_type": "constructed_candle",
+    "end": "2026-11-17T00:00:00.000000Z",
+    "fast_period": 20,
+    "interval": "1m",
+    "slow_period": 50,
+    "start": "2026-11-16T00:00:00.000000Z",
+    "starting_balance": "10000",
+    "symbol": "MSFT"
+  },
+  "decisions": [
+    {
+      "available_at": "2026-11-16T21:11:00.000000Z",
+      "candle_id": 102,
+      "candle_open_timestamp": "2026-11-16T21:10:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": null,
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:12:00.000000Z",
+      "candle_id": 104,
+      "candle_open_timestamp": "2026-11-16T21:11:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": null,
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:13:00.000000Z",
+      "candle_id": 106,
+      "candle_open_timestamp": "2026-11-16T21:12:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": null,
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:14:00.000000Z",
+      "candle_id": 108,
+      "candle_open_timestamp": "2026-11-16T21:13:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": null,
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:15:00.000000Z",
+      "candle_id": 110,
+      "candle_open_timestamp": "2026-11-16T21:14:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": null,
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:16:00.000000Z",
+      "candle_id": 112,
+      "candle_open_timestamp": "2026-11-16T21:15:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": null,
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:17:00.000000Z",
+      "candle_id": 114,
+      "candle_open_timestamp": "2026-11-16T21:16:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": null,
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:18:00.000000Z",
+      "candle_id": 116,
+      "candle_open_timestamp": "2026-11-16T21:17:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": null,
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:19:00.000000Z",
+      "candle_id": 118,
+      "candle_open_timestamp": "2026-11-16T21:18:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": null,
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:20:00.000000Z",
+      "candle_id": 120,
+      "candle_open_timestamp": "2026-11-16T21:19:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": null,
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:21:00.000000Z",
+      "candle_id": 122,
+      "candle_open_timestamp": "2026-11-16T21:20:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": null,
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:22:00.000000Z",
+      "candle_id": 124,
+      "candle_open_timestamp": "2026-11-16T21:21:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": null,
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:23:00.000000Z",
+      "candle_id": 126,
+      "candle_open_timestamp": "2026-11-16T21:22:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": null,
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:24:00.000000Z",
+      "candle_id": 128,
+      "candle_open_timestamp": "2026-11-16T21:23:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": null,
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:25:00.000000Z",
+      "candle_id": 130,
+      "candle_open_timestamp": "2026-11-16T21:24:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": null,
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:26:00.000000Z",
+      "candle_id": 132,
+      "candle_open_timestamp": "2026-11-16T21:25:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": null,
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:27:00.000000Z",
+      "candle_id": 134,
+      "candle_open_timestamp": "2026-11-16T21:26:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": null,
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:28:00.000000Z",
+      "candle_id": 136,
+      "candle_open_timestamp": "2026-11-16T21:27:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": null,
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:29:00.000000Z",
+      "candle_id": 138,
+      "candle_open_timestamp": "2026-11-16T21:28:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": null,
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:30:00.000000Z",
+      "candle_id": 140,
+      "candle_open_timestamp": "2026-11-16T21:29:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:31:00.000000Z",
+      "candle_id": 142,
+      "candle_open_timestamp": "2026-11-16T21:30:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:32:00.000000Z",
+      "candle_id": 144,
+      "candle_open_timestamp": "2026-11-16T21:31:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:33:00.000000Z",
+      "candle_id": 146,
+      "candle_open_timestamp": "2026-11-16T21:32:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:34:00.000000Z",
+      "candle_id": 148,
+      "candle_open_timestamp": "2026-11-16T21:33:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:35:00.000000Z",
+      "candle_id": 150,
+      "candle_open_timestamp": "2026-11-16T21:34:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:36:00.000000Z",
+      "candle_id": 152,
+      "candle_open_timestamp": "2026-11-16T21:35:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:37:00.000000Z",
+      "candle_id": 154,
+      "candle_open_timestamp": "2026-11-16T21:36:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:38:00.000000Z",
+      "candle_id": 156,
+      "candle_open_timestamp": "2026-11-16T21:37:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:39:00.000000Z",
+      "candle_id": 158,
+      "candle_open_timestamp": "2026-11-16T21:38:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:40:00.000000Z",
+      "candle_id": 160,
+      "candle_open_timestamp": "2026-11-16T21:39:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:41:00.000000Z",
+      "candle_id": 162,
+      "candle_open_timestamp": "2026-11-16T21:40:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:42:00.000000Z",
+      "candle_id": 164,
+      "candle_open_timestamp": "2026-11-16T21:41:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:43:00.000000Z",
+      "candle_id": 166,
+      "candle_open_timestamp": "2026-11-16T21:42:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:44:00.000000Z",
+      "candle_id": 168,
+      "candle_open_timestamp": "2026-11-16T21:43:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:45:00.000000Z",
+      "candle_id": 170,
+      "candle_open_timestamp": "2026-11-16T21:44:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:46:00.000000Z",
+      "candle_id": 172,
+      "candle_open_timestamp": "2026-11-16T21:45:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:47:00.000000Z",
+      "candle_id": 174,
+      "candle_open_timestamp": "2026-11-16T21:46:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:48:00.000000Z",
+      "candle_id": 176,
+      "candle_open_timestamp": "2026-11-16T21:47:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:49:00.000000Z",
+      "candle_id": 178,
+      "candle_open_timestamp": "2026-11-16T21:48:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:50:00.000000Z",
+      "candle_id": 180,
+      "candle_open_timestamp": "2026-11-16T21:49:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:51:00.000000Z",
+      "candle_id": 182,
+      "candle_open_timestamp": "2026-11-16T21:50:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:52:00.000000Z",
+      "candle_id": 184,
+      "candle_open_timestamp": "2026-11-16T21:51:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:53:00.000000Z",
+      "candle_id": 186,
+      "candle_open_timestamp": "2026-11-16T21:52:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:54:00.000000Z",
+      "candle_id": 188,
+      "candle_open_timestamp": "2026-11-16T21:53:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:55:00.000000Z",
+      "candle_id": 190,
+      "candle_open_timestamp": "2026-11-16T21:54:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:56:00.000000Z",
+      "candle_id": 192,
+      "candle_open_timestamp": "2026-11-16T21:55:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:57:00.000000Z",
+      "candle_id": 194,
+      "candle_open_timestamp": "2026-11-16T21:56:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:58:00.000000Z",
+      "candle_id": 196,
+      "candle_open_timestamp": "2026-11-16T21:57:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T21:59:00.000000Z",
+      "candle_id": 198,
+      "candle_open_timestamp": "2026-11-16T21:58:00.000000Z",
+      "confirmed": false,
+      "reason": "insufficient_history",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": null,
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T22:00:00.000000Z",
+      "candle_id": 200,
+      "candle_open_timestamp": "2026-11-16T21:59:00.000000Z",
+      "confirmed": false,
+      "reason": "awaiting_previous_sma",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": "100.0",
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T22:01:00.000000Z",
+      "candle_id": 202,
+      "candle_open_timestamp": "2026-11-16T22:00:00.000000Z",
+      "confirmed": true,
+      "execution_candle_id": 204,
+      "reason": "next_eligible_open",
+      "signal": "BUY",
+      "sma_fast": "101.0",
+      "sma_slow": "100.4",
+      "status": "filled"
+    },
+    {
+      "available_at": "2026-11-16T22:02:00.000000Z",
+      "candle_id": 204,
+      "candle_open_timestamp": "2026-11-16T22:01:00.000000Z",
+      "confirmed": true,
+      "reason": "no_crossover",
+      "signal": "HOLD",
+      "sma_fast": "100.0",
+      "sma_slow": "100.0",
+      "status": "hold"
+    },
+    {
+      "available_at": "2026-11-16T22:03:00.000000Z",
+      "candle_id": 206,
+      "candle_open_timestamp": "2026-11-16T22:02:00.000000Z",
+      "confirmed": true,
+      "execution_candle_id": 208,
+      "reason": "next_eligible_open",
+      "signal": "SELL",
+      "sma_fast": "99.0",
+      "sma_slow": "99.6",
+      "status": "filled"
+    },
+    {
+      "available_at": "2026-11-16T22:04:00.000000Z",
+      "candle_id": 208,
+      "candle_open_timestamp": "2026-11-16T22:03:00.000000Z",
+      "confirmed": true,
+      "reason": "no_crossover",
+      "signal": "HOLD",
+      "sma_fast": "98.5",
+      "sma_slow": "99.4",
+      "status": "hold"
+    }
+  ],
+  "equity_curve": [
+    {
+      "candle_id": 102,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:10:00.000000Z"
+    },
+    {
+      "candle_id": 102,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:11:00.000000Z"
+    },
+    {
+      "candle_id": 104,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:11:00.000000Z"
+    },
+    {
+      "candle_id": 104,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:12:00.000000Z"
+    },
+    {
+      "candle_id": 106,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:12:00.000000Z"
+    },
+    {
+      "candle_id": 106,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:13:00.000000Z"
+    },
+    {
+      "candle_id": 108,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:13:00.000000Z"
+    },
+    {
+      "candle_id": 108,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:14:00.000000Z"
+    },
+    {
+      "candle_id": 110,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:14:00.000000Z"
+    },
+    {
+      "candle_id": 110,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:15:00.000000Z"
+    },
+    {
+      "candle_id": 112,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:15:00.000000Z"
+    },
+    {
+      "candle_id": 112,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:16:00.000000Z"
+    },
+    {
+      "candle_id": 114,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:16:00.000000Z"
+    },
+    {
+      "candle_id": 114,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:17:00.000000Z"
+    },
+    {
+      "candle_id": 116,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:17:00.000000Z"
+    },
+    {
+      "candle_id": 116,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:18:00.000000Z"
+    },
+    {
+      "candle_id": 118,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:18:00.000000Z"
+    },
+    {
+      "candle_id": 118,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:19:00.000000Z"
+    },
+    {
+      "candle_id": 120,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:19:00.000000Z"
+    },
+    {
+      "candle_id": 120,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:20:00.000000Z"
+    },
+    {
+      "candle_id": 122,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:20:00.000000Z"
+    },
+    {
+      "candle_id": 122,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:21:00.000000Z"
+    },
+    {
+      "candle_id": 124,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:21:00.000000Z"
+    },
+    {
+      "candle_id": 124,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:22:00.000000Z"
+    },
+    {
+      "candle_id": 126,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:22:00.000000Z"
+    },
+    {
+      "candle_id": 126,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:23:00.000000Z"
+    },
+    {
+      "candle_id": 128,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:23:00.000000Z"
+    },
+    {
+      "candle_id": 128,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:24:00.000000Z"
+    },
+    {
+      "candle_id": 130,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:24:00.000000Z"
+    },
+    {
+      "candle_id": 130,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:25:00.000000Z"
+    },
+    {
+      "candle_id": 132,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:25:00.000000Z"
+    },
+    {
+      "candle_id": 132,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:26:00.000000Z"
+    },
+    {
+      "candle_id": 134,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:26:00.000000Z"
+    },
+    {
+      "candle_id": 134,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:27:00.000000Z"
+    },
+    {
+      "candle_id": 136,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:27:00.000000Z"
+    },
+    {
+      "candle_id": 136,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:28:00.000000Z"
+    },
+    {
+      "candle_id": 138,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:28:00.000000Z"
+    },
+    {
+      "candle_id": 138,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:29:00.000000Z"
+    },
+    {
+      "candle_id": 140,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:29:00.000000Z"
+    },
+    {
+      "candle_id": 140,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:30:00.000000Z"
+    },
+    {
+      "candle_id": 142,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:30:00.000000Z"
+    },
+    {
+      "candle_id": 142,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:31:00.000000Z"
+    },
+    {
+      "candle_id": 144,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:31:00.000000Z"
+    },
+    {
+      "candle_id": 144,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:32:00.000000Z"
+    },
+    {
+      "candle_id": 146,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:32:00.000000Z"
+    },
+    {
+      "candle_id": 146,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:33:00.000000Z"
+    },
+    {
+      "candle_id": 148,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:33:00.000000Z"
+    },
+    {
+      "candle_id": 148,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:34:00.000000Z"
+    },
+    {
+      "candle_id": 150,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:34:00.000000Z"
+    },
+    {
+      "candle_id": 150,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:35:00.000000Z"
+    },
+    {
+      "candle_id": 152,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:35:00.000000Z"
+    },
+    {
+      "candle_id": 152,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:36:00.000000Z"
+    },
+    {
+      "candle_id": 154,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:36:00.000000Z"
+    },
+    {
+      "candle_id": 154,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:37:00.000000Z"
+    },
+    {
+      "candle_id": 156,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:37:00.000000Z"
+    },
+    {
+      "candle_id": 156,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:38:00.000000Z"
+    },
+    {
+      "candle_id": 158,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:38:00.000000Z"
+    },
+    {
+      "candle_id": 158,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:39:00.000000Z"
+    },
+    {
+      "candle_id": 160,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:39:00.000000Z"
+    },
+    {
+      "candle_id": 160,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:40:00.000000Z"
+    },
+    {
+      "candle_id": 162,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:40:00.000000Z"
+    },
+    {
+      "candle_id": 162,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:41:00.000000Z"
+    },
+    {
+      "candle_id": 164,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:41:00.000000Z"
+    },
+    {
+      "candle_id": 164,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:42:00.000000Z"
+    },
+    {
+      "candle_id": 166,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:42:00.000000Z"
+    },
+    {
+      "candle_id": 166,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:43:00.000000Z"
+    },
+    {
+      "candle_id": 168,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:43:00.000000Z"
+    },
+    {
+      "candle_id": 168,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:44:00.000000Z"
+    },
+    {
+      "candle_id": 170,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:44:00.000000Z"
+    },
+    {
+      "candle_id": 170,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:45:00.000000Z"
+    },
+    {
+      "candle_id": 172,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:45:00.000000Z"
+    },
+    {
+      "candle_id": 172,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:46:00.000000Z"
+    },
+    {
+      "candle_id": 174,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:46:00.000000Z"
+    },
+    {
+      "candle_id": 174,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:47:00.000000Z"
+    },
+    {
+      "candle_id": 176,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:47:00.000000Z"
+    },
+    {
+      "candle_id": 176,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:48:00.000000Z"
+    },
+    {
+      "candle_id": 178,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:48:00.000000Z"
+    },
+    {
+      "candle_id": 178,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:49:00.000000Z"
+    },
+    {
+      "candle_id": 180,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:49:00.000000Z"
+    },
+    {
+      "candle_id": 180,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:50:00.000000Z"
+    },
+    {
+      "candle_id": 182,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:50:00.000000Z"
+    },
+    {
+      "candle_id": 182,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:51:00.000000Z"
+    },
+    {
+      "candle_id": 184,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:51:00.000000Z"
+    },
+    {
+      "candle_id": 184,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:52:00.000000Z"
+    },
+    {
+      "candle_id": 186,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:52:00.000000Z"
+    },
+    {
+      "candle_id": 186,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:53:00.000000Z"
+    },
+    {
+      "candle_id": 188,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:53:00.000000Z"
+    },
+    {
+      "candle_id": 188,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:54:00.000000Z"
+    },
+    {
+      "candle_id": 190,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:54:00.000000Z"
+    },
+    {
+      "candle_id": 190,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:55:00.000000Z"
+    },
+    {
+      "candle_id": 192,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:55:00.000000Z"
+    },
+    {
+      "candle_id": 192,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:56:00.000000Z"
+    },
+    {
+      "candle_id": 194,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:56:00.000000Z"
+    },
+    {
+      "candle_id": 194,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:57:00.000000Z"
+    },
+    {
+      "candle_id": 196,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:57:00.000000Z"
+    },
+    {
+      "candle_id": 196,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:58:00.000000Z"
+    },
+    {
+      "candle_id": 198,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:58:00.000000Z"
+    },
+    {
+      "candle_id": 198,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:59:00.000000Z"
+    },
+    {
+      "candle_id": 200,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T21:59:00.000000Z"
+    },
+    {
+      "candle_id": 200,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T22:00:00.000000Z"
+    },
+    {
+      "candle_id": 202,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T22:00:00.000000Z"
+    },
+    {
+      "candle_id": 202,
+      "cash": "10000.000000",
+      "equity": "10000.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T22:01:00.000000Z"
+    },
+    {
+      "candle_id": 204,
+      "cash": "8000.000000",
+      "equity": "10000.000000",
+      "event": "open",
+      "quantity": 16,
+      "timestamp": "2026-11-16T22:01:00.000000Z"
+    },
+    {
+      "candle_id": 204,
+      "cash": "8000.000000",
+      "equity": "9280.000000",
+      "event": "close",
+      "quantity": 16,
+      "timestamp": "2026-11-16T22:02:00.000000Z"
+    },
+    {
+      "candle_id": 206,
+      "cash": "8000.000000",
+      "equity": "9280.000000",
+      "event": "open",
+      "quantity": 16,
+      "timestamp": "2026-11-16T22:02:00.000000Z"
+    },
+    {
+      "candle_id": 206,
+      "cash": "8000.000000",
+      "equity": "9280.000000",
+      "event": "close",
+      "quantity": 16,
+      "timestamp": "2026-11-16T22:03:00.000000Z"
+    },
+    {
+      "candle_id": 208,
+      "cash": "9440.000000",
+      "equity": "9440.000000",
+      "event": "open",
+      "quantity": 0,
+      "timestamp": "2026-11-16T22:03:00.000000Z"
+    },
+    {
+      "candle_id": 208,
+      "cash": "9440.000000",
+      "equity": "9440.000000",
+      "event": "close",
+      "quantity": 0,
+      "timestamp": "2026-11-16T22:04:00.000000Z"
+    }
+  ],
+  "fills": [
+    {
+      "candle_id": 204,
+      "fees": "0.000000",
+      "price": "125.000000",
+      "quantity": 16,
+      "side": "BUY",
+      "signal_available_at": "2026-11-16T22:01:00.000000Z",
+      "signal_candle_id": 202,
+      "slippage_bps": 0,
+      "timestamp": "2026-11-16T22:01:00.000000Z"
+    },
+    {
+      "candle_id": 208,
+      "fees": "0.000000",
+      "price": "90.000000",
+      "quantity": 16,
+      "side": "SELL",
+      "signal_available_at": "2026-11-16T22:03:00.000000Z",
+      "signal_candle_id": 206,
+      "slippage_bps": 0,
+      "timestamp": "2026-11-16T22:03:00.000000Z"
+    }
+  ],
+  "input_candles": [
+    {
+      "available_at": "2026-11-16T21:11:00.000000Z",
+      "data_mode": "simulated",
+      "id": 102,
+      "opening": "2026-11-16T21:10:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:12:00.000000Z",
+      "data_mode": "simulated",
+      "id": 104,
+      "opening": "2026-11-16T21:11:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:13:00.000000Z",
+      "data_mode": "simulated",
+      "id": 106,
+      "opening": "2026-11-16T21:12:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:14:00.000000Z",
+      "data_mode": "simulated",
+      "id": 108,
+      "opening": "2026-11-16T21:13:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:15:00.000000Z",
+      "data_mode": "simulated",
+      "id": 110,
+      "opening": "2026-11-16T21:14:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:16:00.000000Z",
+      "data_mode": "simulated",
+      "id": 112,
+      "opening": "2026-11-16T21:15:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:17:00.000000Z",
+      "data_mode": "simulated",
+      "id": 114,
+      "opening": "2026-11-16T21:16:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:18:00.000000Z",
+      "data_mode": "simulated",
+      "id": 116,
+      "opening": "2026-11-16T21:17:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:19:00.000000Z",
+      "data_mode": "simulated",
+      "id": 118,
+      "opening": "2026-11-16T21:18:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:20:00.000000Z",
+      "data_mode": "simulated",
+      "id": 120,
+      "opening": "2026-11-16T21:19:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:21:00.000000Z",
+      "data_mode": "simulated",
+      "id": 122,
+      "opening": "2026-11-16T21:20:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:22:00.000000Z",
+      "data_mode": "simulated",
+      "id": 124,
+      "opening": "2026-11-16T21:21:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:23:00.000000Z",
+      "data_mode": "simulated",
+      "id": 126,
+      "opening": "2026-11-16T21:22:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:24:00.000000Z",
+      "data_mode": "simulated",
+      "id": 128,
+      "opening": "2026-11-16T21:23:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:25:00.000000Z",
+      "data_mode": "simulated",
+      "id": 130,
+      "opening": "2026-11-16T21:24:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:26:00.000000Z",
+      "data_mode": "simulated",
+      "id": 132,
+      "opening": "2026-11-16T21:25:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:27:00.000000Z",
+      "data_mode": "simulated",
+      "id": 134,
+      "opening": "2026-11-16T21:26:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:28:00.000000Z",
+      "data_mode": "simulated",
+      "id": 136,
+      "opening": "2026-11-16T21:27:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:29:00.000000Z",
+      "data_mode": "simulated",
+      "id": 138,
+      "opening": "2026-11-16T21:28:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:30:00.000000Z",
+      "data_mode": "simulated",
+      "id": 140,
+      "opening": "2026-11-16T21:29:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:31:00.000000Z",
+      "data_mode": "simulated",
+      "id": 142,
+      "opening": "2026-11-16T21:30:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:32:00.000000Z",
+      "data_mode": "simulated",
+      "id": 144,
+      "opening": "2026-11-16T21:31:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:33:00.000000Z",
+      "data_mode": "simulated",
+      "id": 146,
+      "opening": "2026-11-16T21:32:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:34:00.000000Z",
+      "data_mode": "simulated",
+      "id": 148,
+      "opening": "2026-11-16T21:33:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:35:00.000000Z",
+      "data_mode": "simulated",
+      "id": 150,
+      "opening": "2026-11-16T21:34:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:36:00.000000Z",
+      "data_mode": "simulated",
+      "id": 152,
+      "opening": "2026-11-16T21:35:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:37:00.000000Z",
+      "data_mode": "simulated",
+      "id": 154,
+      "opening": "2026-11-16T21:36:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:38:00.000000Z",
+      "data_mode": "simulated",
+      "id": 156,
+      "opening": "2026-11-16T21:37:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:39:00.000000Z",
+      "data_mode": "simulated",
+      "id": 158,
+      "opening": "2026-11-16T21:38:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:40:00.000000Z",
+      "data_mode": "simulated",
+      "id": 160,
+      "opening": "2026-11-16T21:39:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:41:00.000000Z",
+      "data_mode": "simulated",
+      "id": 162,
+      "opening": "2026-11-16T21:40:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:42:00.000000Z",
+      "data_mode": "simulated",
+      "id": 164,
+      "opening": "2026-11-16T21:41:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:43:00.000000Z",
+      "data_mode": "simulated",
+      "id": 166,
+      "opening": "2026-11-16T21:42:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:44:00.000000Z",
+      "data_mode": "simulated",
+      "id": 168,
+      "opening": "2026-11-16T21:43:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:45:00.000000Z",
+      "data_mode": "simulated",
+      "id": 170,
+      "opening": "2026-11-16T21:44:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:46:00.000000Z",
+      "data_mode": "simulated",
+      "id": 172,
+      "opening": "2026-11-16T21:45:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:47:00.000000Z",
+      "data_mode": "simulated",
+      "id": 174,
+      "opening": "2026-11-16T21:46:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:48:00.000000Z",
+      "data_mode": "simulated",
+      "id": 176,
+      "opening": "2026-11-16T21:47:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:49:00.000000Z",
+      "data_mode": "simulated",
+      "id": 178,
+      "opening": "2026-11-16T21:48:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:50:00.000000Z",
+      "data_mode": "simulated",
+      "id": 180,
+      "opening": "2026-11-16T21:49:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:51:00.000000Z",
+      "data_mode": "simulated",
+      "id": 182,
+      "opening": "2026-11-16T21:50:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:52:00.000000Z",
+      "data_mode": "simulated",
+      "id": 184,
+      "opening": "2026-11-16T21:51:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:53:00.000000Z",
+      "data_mode": "simulated",
+      "id": 186,
+      "opening": "2026-11-16T21:52:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:54:00.000000Z",
+      "data_mode": "simulated",
+      "id": 188,
+      "opening": "2026-11-16T21:53:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:55:00.000000Z",
+      "data_mode": "simulated",
+      "id": 190,
+      "opening": "2026-11-16T21:54:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:56:00.000000Z",
+      "data_mode": "simulated",
+      "id": 192,
+      "opening": "2026-11-16T21:55:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:57:00.000000Z",
+      "data_mode": "simulated",
+      "id": 194,
+      "opening": "2026-11-16T21:56:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:58:00.000000Z",
+      "data_mode": "simulated",
+      "id": 196,
+      "opening": "2026-11-16T21:57:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T21:59:00.000000Z",
+      "data_mode": "simulated",
+      "id": 198,
+      "opening": "2026-11-16T21:58:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T22:00:00.000000Z",
+      "data_mode": "simulated",
+      "id": 200,
+      "opening": "2026-11-16T21:59:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T22:01:00.000000Z",
+      "data_mode": "simulated",
+      "id": 202,
+      "opening": "2026-11-16T22:00:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T22:02:00.000000Z",
+      "data_mode": "simulated",
+      "id": 204,
+      "opening": "2026-11-16T22:01:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T22:03:00.000000Z",
+      "data_mode": "simulated",
+      "id": 206,
+      "opening": "2026-11-16T22:02:00.000000Z",
+      "revision": 1
+    },
+    {
+      "available_at": "2026-11-16T22:04:00.000000Z",
+      "data_mode": "simulated",
+      "id": 208,
+      "opening": "2026-11-16T22:03:00.000000Z",
+      "revision": 1
+    }
+  ],
+  "input_hash": "53d3699ad9b579261b69753edc329c8d7188df9f308c5286bbd726c110d6b60d",
+  "mode": "BACKTEST \u00b7 SIMULATED",
+  "quality": {
+    "completed_available_by_end": 54,
+    "incomplete_rows_excluded": 0,
+    "later_completed_versions_excluded": 0,
+    "missing_interval_slots": 0,
+    "warmup_before_start": false
+  },
+  "snapshot_max_id": 231,
+  "summary": {
+    "completed_trades": 1,
+    "ending_cash": "9440.000000",
+    "ending_equity": "9440.000000",
+    "fill_count": 2,
+    "max_drawdown_percent": "7.200",
+    "open_quantity": 0,
+    "realized_pl": "-560.000000",
+    "starting_equity": "10000.000000",
+    "total_return_percent": "-5.600",
+    "unrealized_pl": "0.000000",
+    "win_rate_percent": "0"
+  },
+  "trades": [
+    {
+      "entry_candle_id": 204,
+      "entry_price": "125.000000",
+      "entry_timestamp": "2026-11-16T22:01:00.000000Z",
+      "exit_candle_id": 208,
+      "exit_price": "90.000000",
+      "exit_timestamp": "2026-11-16T22:03:00.000000Z",
+      "quantity": 16,
+      "realized_pl": "-560.000000"
+    }
+  ]
+}

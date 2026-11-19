@@ -163,9 +163,10 @@ See [the evidence log](docs/evidence-log.md) for measured test outcomes and runt
 
 ## Remaining work
 Provider-candle ingestion, comprehensive exchange calendars, and feed gap
-recovery remain unimplemented. Part 4.2 adds indicators/simulated trading/backtests;
+recovery remain unimplemented. Part 4.2 now includes completed-candle SMA indicators/crossover signals and a manual
+simulated account and opt-in automatic simulated crossover strategy; isolated historical backtesting is implemented.
 Part 4.3 adds AI/chat/image interpretation/audio. None of those later features are
-implemented here, and no report.md has been created.
+implemented here.
 
 
 ## Browser WebSocket integration
@@ -242,8 +243,7 @@ Daily totals and last sizes are never summed or converted into invented candle v
 
 Recorded/simulated data stays labeled; delayed, stale, disconnected and unavailable
 values remain last known. Receipt timestamps and charts remain available during
-browser reconnection. Replay is implemented separately; indicator calculation and simulated trading
-remain out of scope. Details and browser evidence are in
+browser reconnection. Replay, SMA indicators and manual simulated accounting are implemented; opt-in automatic simulated trading is implemented; isolated backtesting is now available below. Details and browser evidence are in
 [docs/charting.md](docs/charting.md) and [the evidence log](docs/evidence-log.md).
 
 
@@ -337,3 +337,222 @@ mode leaves manual navigation available. The same controls work for live and rep
 across symbol/interval changes. Empty/small datasets use available candles only.
 The replay panel now has an **Open replay** button in Live mode; playback controls
 activate after the saved selection loads instead of appearing as unexplained placeholders.
+
+## Part 4.2 — SMA indicators and crossover signals
+Development branch: `codex/part-2`. SMA indicators/signals are implemented alongside the manual simulated account below;
+opt-in automatic simulated trading is implemented; isolated historical backtesting is implemented. Existing market streaming,
+volume handling, history and replay are preserved.
+
+The dashboard overlays **SMA(20)** (blue), **SMA(50)** (gold), and BUY/SELL arrows. The
+legend shows the latest completed-candle values and crossover result with its candle
+timestamp. Toggle **SMA indicators** to hide/show lines and markers. Only completed
+candles count: SMA20 needs 20 closes, SMA50 needs 50, and a crossover needs both previous
+and current pairs (at least 51 completed candles). Incomplete candles have no indicator
+values/signals; no provisional calculations are performed. The indicator API itself never executes trades.
+
+BUY requires previous fast<=slow and current fast>slow; SELL requires previous fast>=slow
+and current fast<slow. Current equality means HOLD. Staying above/below produces HOLD,
+not repeated BUY/SELL. Higher candle revisions recompute the snapshot; stable signal IDs
+replace corrected/retracted markers instead of appending duplicates.
+
+| API | Behavior |
+| --- | --- |
+| GET /api/indicators/config | Periods, equality/completion rules, limits and execution-disabled flag |
+| GET /api/indicators/sma | symbol/interval, limit 1–1000, optional as_of_id; points, signals and latest completed status |
+| GET /api/indicators/signals | Same selection; confirmed crossings plus latest completed HOLD/BUY/SELL status |
+| POST /api/indicators/evaluate | Bounded chart candle snapshot for live or replay; all calculations remain in Python |
+
+Replay sends only its arrived/as-of candles to evaluate. It does not query current/future
+SQLite revisions for indicators. Source/provenance/type changes reset the window rather
+than combining unlike data. Missing time buckets are not filled. Calculations cover the
+retained 1,000-candle snapshot, so its earliest points need their own warm-up.
+
+Verification: **132 backend tests**, **33 frontend tests**, and production build passed.
+Manual/Fraction references and actual saved-data API results are documented in
+[docs/indicators.md](docs/indicators.md). Browser automation was unavailable during this
+stage, so no new visual browser verification is claimed. No schema migration or indicator
+ledger was added. Signals are analytical derived views, not executions or recommendations.
+
+## Part 4.2 — Manual SIMULATED account
+The dashboard now includes a persistent **SIMULATED** USD account starting at **$10,000**,
+available cash, equity, average-cost positions, realized/unrealized P/L, order history and
+fill/trade history. This is paper accounting with no brokerage connection or real trades.
+
+Choose the stock using the dashboard selector. Enter whole shares and an explicit
+**manual reference price** (up to six decimal places), then submit a paper order.
+“Use displayed price” copies that price rounded to six places; it does not guarantee a
+current market fill. Zero commissions and zero slippage apply. Long-only, no leverage,
+no fractional shares or short selling. Uncheck Fill immediately to create a pending
+order; it reserves no funds/shares and fills at its fixed creation reference price only
+when you manually select Fill. Pending orders can be canceled. Insufficient cash/shares
+creates a retained rejected order; malformed requests return422 without creating an order.
+
+Orders use client_order_id idempotency keys; retrying the same request cannot execute
+again, and reusing a key with different details returns409. Cash, position, fill and
+order status commit atomically. Restart/replay never resets or re-executes the account.
+Replay disables manual submission/fill controls; the account remains independent.
+Automatic execution is a separate opt-in strategy described below; isolated backtesting is described below.
+
+Position values use latest saved provider quotes, with their timestamps, age and original
+provenance. They can be stale. Missing/invalid marks produce unavailable equity/P&L,
+not invented prices. Cash, costs and realized P/L remain available. Monetary accounting
+uses integer micro-USD; averages are displayed from exact remaining cost basis. See
+[execution/accounting documentation](docs/paper-trading.md) and
+[database schema](docs/database.md) for rounding, lifecycle and migration details.
+
+APIs: GET `/api/paper/account`, `/positions`, `/orders`, `/fills`, `/trades`;
+POST `/api/paper/orders`, `/orders/{id}/execute`, `/orders/{id}/cancel`.
+History endpoints accept limit1–1000 (default100); the dashboard shows the latest100.
+Initialization adds the accounting tables/seed inside the existing startup transaction;
+original observations and market schema_version1 are preserved. No account reset endpoint
+is provided. Back up active SQLite files with the SQLite backup API, including WAL state.
+
+## Part 4.2 — Automatic SIMULATED SMA strategy
+Automatic trading defaults **OFF**. In the strategy panel, enable the selected symbol and
+interval explicitly. Disable before changing its configured selection. This controls a
+single backend strategy, independently of which browser is open; enabled configuration
+survives restart. Disable cancels pending decisions without liquidating existing shares.
+
+Confirmed completed-candle SMA20/50 crossings queue decisions. BUY allocates up to20% of
+cash at the first eligible subsequent observed price, rounded down to whole shares;
+SELL closes only shares managed by that strategy scope. No brokerage, leverage, shorts,
+fabricated fills or real execution. Analytical arrows differ from purple SIM fill circles.
+Replay cannot drive this strategy; an already enabled engine can still process genuine
+provider arrivals while a browser views replay.
+
+GET `/api/strategy/status`, POST `/api/strategy/config` with
+`{"enabled":true,"symbol":"AAPL","interval":"1m"}`, and GET
+`/api/strategy/fills?symbol=AAPL&interval=1m` expose configuration and traceable actions.
+See [strategy rules and limitations](docs/strategy.md).
+
+Latest verification: **173 backend tests**, **39 frontend tests**, and production build
+passed using deterministic fixtures. Two startup initializations preserved89,807 market
+rows and account row hashes, with integrity/foreign-key checks passing. Automatic trading
+was left OFF and no test orders were submitted to the user account. Browser automation
+transport was unavailable, so visual verification is not claimed for this stage.
+
+## Part 4.2 — Historical backtesting
+Use **SMA crossover backtesting** below the chart. Select the dashboard symbol/interval,
+UTC start/end (end exclusive), candle origin, starting balance and periods; click **Run
+Backtest**. Defaults$10,000/SMA20/50; fast must be less than slow. Stored data only, no
+additional Yahoo downloader. Results include equity/return/P&L, completed trades vs fills,
+win rate, maximum drawdown, equity curve and histories. Insufficient history is reported.
+
+The event-driven engine shares the existing SMA/crossing/sizing functions, uses first
+completed candle versions and recorded availability, and fills at the next eligible open.
+It never fills at the signal candle close. Long-only whole shares,20% cash allocation,
+zero fees/slippage. Missing next open means unfilled; no forced end liquidation.
+Each run has independent cash/positions and persists only in backtest_runs. Live account,
+strategy, replay and market observations are untouched; backtest fills are never live.
+
+APIs: POST `/api/backtests`, GET `/api/backtests`, GET `/api/backtests/{id}`. See
+[backtesting rules, schema and bias limitations](docs/backtesting.md).
+Latest full verification: **192 backend tests**, **42 frontend tests**, production build
+passed in the matching dependency-equipped temporary copy. Two runs using292 saved AAPL
+candles matched; all108,941 market records and live account/strategy row hashes were
+preserved. Automatic trading stayedOFF. Browser automation was unavailable, so no new
+visual verification is claimed. Historical results do not guarantee future performance.
+
+## Part 4.2 verification and continuous integration
+Latest local checks: **204 backend tests passed**, **42 frontend tests passed**, and
+production build succeeded. Batch and incremental SMA20/50 were checked against exact
+Fraction arithmetic and pandas rolling means over360 synthetic points. Absolute tolerance
+is1e-9 USD (relative0); largest measured difference2.3283064365386963e-10 USD.
+Explicit values, accounting tables, full strategy lineage and hand-checked equity/drawdown
+examples are in [verification.md](docs/verification.md) and
+[reference evidence](docs/evidence/sma-reference-verification.json).
+
+```sh
+cd backend
+../.venv/bin/python -m pytest
+../.venv/bin/python scripts/verify_references.py
+cd ../frontend
+npm test
+npm run build
+```
+
+[GitHub Actions workflow](.github/workflows/ci.yml) runs on pushes and pull requests
+(and manual dispatch): Python3.13 backend install/tests/reference checks; Node24 npm ci,
+frontend tests/build. Yahoo is disabled and no API keys are required. Its YAML passed
+local checks; **it has not been pushed or run on GitHub in this stage**.
+Tests used the matching temporary source/runtime copy; no live account orders were made.
+Browser transport was unavailable, so visual verification remains outstanding. Existing
+Starlette/httpx deprecation warning remains; Part4.3 was not started.
+
+## Final Part4.2 requirements review
+The [22-item audit](docs/part-4.2-review.md) records implementation, evidence and explicit
+unmet requirements. Final rerun: **204 backend tests**, **42 frontend tests**, production
+build passed. A disposable full provider-shaped observation→completed candle→SMA→signal→
+order/fill trace verified16shares@125, cash8000/equity10000. A saved-data backup backtest
+used327candles,11fills/5completed trades, ending equity9996.525; repeated results matched
+without account/market mutations. These are verification outcomes, not expected returns.
+
+Browser inspection is still blocked by unavailable automation; hosted Part4.2 CI has not
+run and the workflow/code remain uncommitted. The submitted commit and accessible30–60s
+Part4.2 video remain pending. No new report or commit was created; an older report.md was
+left untouched. Simulation/source security checks and exact evidence links are in the
+audit. Part4.3 remains out of scope.
+
+## Chart-side paper trading
+On desktop, the main workstation now places candles/SMA/volume beside a sticky
+**SIMULATED account + manual order ticket**. Cash, equity, P/L, selected-symbol holdings,
+displayed reference/feed timestamp and estimated order cost/proceeds are visible together.
+“Use displayed price” still requires an explicit click; prices are not silently updated.
+Positions, orders and fills sit directly below this workspace. Market/candle metadata is
+expandable; replay, automatic strategy controls and backtesting follow below. Smaller
+screens stack the ticket after the chart. Estimates are presentation only; the backend
+remains the authority for validation/accounting. Replay continues to disable order entry.
+Latest layout verification:43 frontend tests/build passed; browser automation unavailable.
+
+## Collapsible dashboard panels
+Click a panel's title row to Hide/Show it. The chart, status cards, simulated account,
+positions/activity, observations, replay, automatic strategy and backtest windows are
+collapsible; positions/orders/fills can also collapse individually. Main panels start
+open, and the existing market metadata disclosure stays initially closed. Hiding preserves
+forms/chart state and background updates; it does not pause replay or disable automatic
+trading. Strategy ON/OFF remains in its collapsed header. Open/closed preferences are stored in this browser and restored
+across reloads. Latest checks:204backend/45frontend tests and build passed; browser access
+remains unavailable.
+
+## Remembered panel layout
+Each panel and nested history/details section remembers its open/closed state across
+refreshes using browser localStorage. Keys are stable when the symbol, interval or data
+mode changes. Preferences apply to this browser and site address; clearing site data
+resets them. If storage is blocked/full, toggling still works for the session. Collapsed
+status cards now shrink to header bars rather than stretching to neighboring open cards.
+Latest checks:204 backend tests,48 frontend tests and production build passed.
+
+Market selection controls (Live/Replay, stock symbol and1m/5m/15m interval) now live inside the chart panel, above the instrument/zoom toolbar.
+
+## Recover Yahoo streaming from the app
+Click **Reconnect Yahoo feed** beside the market chart's mode/stock/interval selectors.
+The backend must already be running. This restarts the single shared Yahoo session and
+completion task, without changing account/strategy settings, subscriptions or saved data.
+Repeated requests within3seconds share the same restart. The control is disabled during
+replay and while its request is pending. A connecting response is not a live-data claim;
+feed freshness/status update when actual observations arrive.
+
+If persistence previously failed, the backend checks the database write lock before
+resuming; a remaining storage problem returns a visible error instead of discarding data.
+This explicitly enables a startup-disabled feed for the current process; environment
+settings still govern the next backend startup. No browser control can restart a stopped
+backend process. Latest checks:208backend/49frontend tests and build passed; actual local
+API/provider recovery verified separately from mocked tests.
+
+## November16 verification evidence
+Latest rerun: **208 backend tests**, **49 frontend tests**, production build and
+independent SMA checks passed. **17 actual browser workflow checks passed** in a separate,
+clearly labeled synthetic fixture instance: chart/volume/SMAs/markers, manual and automatic
+paper trades, accounting, backtest results/equity/history, errors, replay isolation and
+refresh persistence. Your main account was not used for test orders.
+See [the current verification record](docs/testing-2026-11-16.md) and
+[repeatable browser cases](docs/browser-test-cases.md). Raw logs/JUnit/reference values,
+screenshots and result JSON are under docs/evidence/2026-11-16/. GitHub-hosted CI has
+not run for this local version; commit/push awaits the user's later instruction.
+report.md was not changed. No Part4.3 implementation was added.
+
+
+## Confirmed chart signals — November 18, 2026
+
+BUY/SELL arrows and actual FILL circles have independent visibility controls and signal details. Saved backtests can display their exact recorded candle/signal/fill snapshot in a separate chart.
+See [marker behavior and verification](docs/chart-signals.md).

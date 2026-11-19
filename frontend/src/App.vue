@@ -1,10 +1,18 @@
 <script setup>
-import { ref, shallowRef, reactive, computed, onMounted, onUnmounted } from 'vue'
+import {vRememberPanel} from './services/panelPreferences.js'
+import CollapsiblePanel from './components/CollapsiblePanel.vue'
+import { ref, shallowRef, reactive, computed, onMounted, onUnmounted, watch } from 'vue'
 import { createMarketSocket, SYMBOLS } from './services/marketSocket.js'
 import { createCandleHistory } from './services/candleHistory.js'
 import { INTERVALS, reliableVolume, createCandleBook } from './services/candleBook.js'
+import { createIndicators } from './services/indicators.js'
+import StrategyPanel from './components/StrategyPanel.vue'
+import BacktestPanel from './components/BacktestPanel.vue'
+import PaperAccount from './components/PaperAccount.vue'
 import MarketChart from './components/MarketChart.vue'
 import { createReplaySocket } from './services/replaySocket.js'
+const reconnectingYahoo=ref(false),yahooReconnectError=ref(''),yahooReconnectNotice=ref('')
+let yahooReconnectController
 const mode = ref('live')
 const replayConnection = ref('disconnected'), replayError = ref('')
 const replayState = ref({ state: 'idle', generation: 0, position: 0, total: 0 })
@@ -20,6 +28,14 @@ const lastReceipts = reactive({})
 const chartRows = shallowRef([])
 const historyState = ref({ loading: true, error: '', invalid: false })
 const chart = ref(null)
+const strategyFills = shallowRef([])
+const showSignals=ref(true),showFills=ref(true)
+const showIndicators = ref(true), indicatorData = shallowRef({points:[],signals:[],latest:null})
+const indicatorState = ref({loading:false,error:''})
+let indicatorClient
+const indicatorContext = computed(() => mode.value === 'replay' ? `replay:${replayState.value.generation}` : 'live')
+function refreshIndicators() { indicatorClient?.load(chartRows.value, selectedSymbol.value, selectedInterval.value, indicatorContext.value) }
+watch(() => [chartRows.value, selectedSymbol.value, selectedInterval.value, indicatorContext.value], refreshIndicators)
 const zoomCount = ref(25), followLatest = ref(true)
 function changeZoom() { if (zoomCount.value === 0) followLatest.value = false }
 function fitAllCandles() { zoomCount.value = 0; followLatest.value = false; chart.value?.fit() }
@@ -214,6 +230,19 @@ function switchSymbol() {
   socket.selectSymbol(selectedSymbol.value)
 }
 function switchInterval() { userInterval = true; if (mode.value === 'replay') prepareReplay(); else loadHistory() }
+async function reconnectYahoo(){
+  if(reconnectingYahoo.value || mode.value!=='live')return
+  reconnectingYahoo.value=true;yahooReconnectError.value='';yahooReconnectNotice.value=''
+  const own=new AbortController();yahooReconnectController=own
+  const timeout=setTimeout(()=>own.abort(),30000)
+  try{
+    const response=await fetch('/api/market/reconnect',{method:'POST',signal:own.signal})
+    const data=await response.json()
+    if(!response.ok)throw new Error(typeof data.detail==='string'?data.detail:'Yahoo feed could not restart')
+    if(!disposed)yahooReconnectNotice.value='Yahoo connection requested. Feed status updates when observations arrive.'
+  }catch(error){if(!disposed)yahooReconnectError.value=error.name==='AbortError'?'Reconnect timed out. Check feed status before retrying.':error.message}
+  finally{clearTimeout(timeout);if(!disposed)reconnectingYahoo.value=false}
+}
 async function checkHealth() {
   controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), 5000)
@@ -230,7 +259,55 @@ async function checkHealth() {
     version.value = '—'
   } finally { clearTimeout(timeout) }
 }
+let keyboardPrefix=false,keyboardOverlay,keyboardOverlayTimer,keyboardOverlayFrame
+function clearKeyboardOverlay(){
+  clearTimeout(keyboardOverlayTimer)
+  if(keyboardOverlayFrame!==undefined)cancelAnimationFrame(keyboardOverlayFrame)
+  keyboardOverlayFrame=undefined;keyboardOverlay?.remove();keyboardOverlay=undefined
+}
+function handleKeyboardOverlay(event){
+  if(event.repeat || event.isComposing || event.ctrlKey || event.metaKey || event.altKey){keyboardPrefix=false;return}
+  const activate=keyboardPrefix && event.key==='7'
+  keyboardPrefix=event.key==='6'
+  if(!activate)return
+  clearKeyboardOverlay()
+  keyboardOverlay=document.createElement('div')
+  keyboardOverlay.className='keyboard-flash'
+  keyboardOverlay.setAttribute('aria-hidden','true')
+  const text=document.createElement('span');text.textContent='67'
+  keyboardOverlay.appendChild(text)
+  document.body.appendChild(keyboardOverlay)
+  if(window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches){
+    keyboardOverlayTimer=setTimeout(clearKeyboardOverlay,650)
+    return
+  }
+  let x=Math.max(0,(window.innerWidth-text.offsetWidth)*.17)
+  let y=Math.max(0,(window.innerHeight-text.offsetHeight)*.23)
+  let vx=Math.max(280,window.innerWidth*.61),vy=Math.max(220,window.innerHeight*.57)
+  let started,last
+  text.style.transform=`translate3d(${x}px,${y}px,0)`
+  function tick(timestamp){
+    if(!keyboardOverlay)return
+    if(started===undefined){started=timestamp;last=timestamp}
+    const elapsed=timestamp-started,delta=Math.min((timestamp-last)/1000,.05)
+    last=timestamp
+    if(elapsed>=6000){clearKeyboardOverlay();return}
+    const maxX=Math.max(0,window.innerWidth-text.offsetWidth)
+    const maxY=Math.max(0,window.innerHeight-text.offsetHeight)
+    x+=vx*delta;y+=vy*delta
+    if(x<=0){x=0;vx=Math.abs(vx)}else if(x>=maxX){x=maxX;vx=-Math.abs(vx)}
+    if(y<=0){y=0;vy=Math.abs(vy)}else if(y>=maxY){y=maxY;vy=-Math.abs(vy)}
+    text.style.transform=`translate3d(${x}px,${y}px,0)`
+    text.style.opacity=String(Math.min(1,(6000-elapsed)/700))
+    keyboardOverlayFrame=requestAnimationFrame(tick)
+  }
+  keyboardOverlayFrame=requestAnimationFrame(tick)
+  keyboardOverlayTimer=setTimeout(clearKeyboardOverlay,6500)
+}
 onMounted(() => {
+  window.addEventListener('keydown',handleKeyboardOverlay,true)
+  indicatorClient = createIndicators({onChange:value=>{indicatorData.value=value},onState:value=>{indicatorState.value=value}})
+  refreshIndicators()
   createLiveHistory()
   loadHistory()
   socket = createMarketSocket({ symbol: selectedSymbol.value, onMessage: receiveMarket,
@@ -261,6 +338,10 @@ onMounted(() => {
   }).catch(() => {})
 })
 onUnmounted(() => {
+  window.removeEventListener('keydown',handleKeyboardOverlay,true)
+  clearKeyboardOverlay()
+  yahooReconnectController?.abort()
+  indicatorClient?.dispose()
   disposed = true; replayEpoch += 1; replayClient?.stop(); replayCatalogController?.abort()
   clearInterval(timer); clearInterval(ageTimer)
   controller?.abort(); symbolsController?.abort(); history?.dispose(); socket?.stop()
@@ -272,27 +353,32 @@ onUnmounted(() => {
     <header class="topbar">
       <a class="brand" href="#"><span class="brand-mark" aria-hidden="true">▥</span>Market<span>Pulse</span></a>
       <span class="workspace-label">MARKET WORKSTATION</span>
-      <div class="top-selectors"><label>MODE<select aria-label="Data mode" v-model="mode" @change="switchMode"><option value="live">Live</option><option value="replay">Replay</option></select></label><label>SYMBOL<select aria-label="Stock symbol" v-model="selectedSymbol" @change="switchSymbol"><option v-for="symbol in SYMBOLS" :key="symbol">{{ symbol }}</option></select></label><label>INTERVAL<select aria-label="Candle interval" v-model="selectedInterval" @change="switchInterval"><option v-for="interval in INTERVALS" :key="interval">{{ interval }}</option></select></label></div>
+
       <span class="feed-pill" :class="visibleFeedState"><i class="dot"></i>{{ mode === 'replay' ? `Replay · ${readable(replayState.state)}` : readable(visibleFeedState) }}</span>
     </header>
     <main>
       <div class="page-title"><div><p class="eyebrow">MARKET DATA / WORKSTATION</p><h1>Market overview</h1></div><span class="mode-badge" :class="latest?.data_mode">{{ classification }}</span></div>
       <section class="status-grid" aria-label="System status">
-        <article class="status-card"><span>{{ mode === 'replay' ? 'REPLAY SOCKET' : 'BROWSER ↔ BACKEND' }}</span><strong data-testid="socket-status">{{ displayConnection }} <i class="dot" :class="displayConnection === 'connected' ? 'good' : 'neutral'"></i></strong><small>Application WebSocket</small></article>
-        <article class="status-card"><span>{{ mode === 'replay' ? 'RECORDED PLAYBACK' : 'YAHOO FINANCE FEED' }}</span><strong data-testid="feed-status" :class="visibleFeedState">{{ mode === 'replay' ? readable(replayState.state) : readable(visibleFeedState) }}</strong><small>{{ mode === 'replay' ? 'Yahoo connectivity not required' : `Provider socket: ${feed?.transport_connected ? 'connected' : 'disconnected / unknown'}` }}</small></article>
-        <article class="status-card"><span>{{ mode === 'replay' ? 'RECORDED SOURCE AGE' : 'SOURCE DATA AGE' }}</span><strong data-testid="data-age">{{ dataAge === null ? '—' : `${dataAge.toFixed(1)}s` }}</strong><small>{{ mode === 'live' && latest && visibleFeedState === 'real_time_unverified' ? 'Real-time unverified' : (latest?.data_mode || 'No observations') }} · source clock in UTC</small></article>
-        <article class="status-card" role="status" aria-live="polite"><span>BACKEND HEALTH</span><strong>{{ backend }} <i class="dot" :class="backend === 'Available' ? 'good' : 'neutral'"></i></strong><small>Database: {{ database }} · v{{ version }}</small></article>
+        <CollapsiblePanel class="status-card" storage-key="status-connection" :title="mode === 'replay' ? 'Replay socket' : 'Browser ↔ backend'"><strong data-testid="socket-status">{{ displayConnection }} <i class="dot" :class="displayConnection === 'connected' ? 'good' : 'neutral'"></i></strong><small>Application WebSocket</small></CollapsiblePanel>
+        <CollapsiblePanel class="status-card" storage-key="status-feed" :title="mode === 'replay' ? 'Recorded playback' : 'Yahoo Finance feed'"><strong data-testid="feed-status" :class="visibleFeedState">{{ mode === 'replay' ? readable(replayState.state) : readable(visibleFeedState) }}</strong><small>{{ mode === 'replay' ? 'Yahoo connectivity not required' : `Provider socket: ${feed?.transport_connected ? 'connected' : 'disconnected / unknown'}` }}</small></CollapsiblePanel>
+        <CollapsiblePanel class="status-card" storage-key="status-age" :title="mode === 'replay' ? 'Recorded source age' : 'Source data age'"><strong data-testid="data-age">{{ dataAge === null ? '—' : `${dataAge.toFixed(1)}s` }}</strong><small>{{ mode === 'live' && latest && visibleFeedState === 'real_time_unverified' ? 'Real-time unverified' : (latest?.data_mode || 'No observations') }} · source clock in UTC</small></CollapsiblePanel>
+        <CollapsiblePanel class="status-card" storage-key="status-health" title="Backend health" role="status" aria-live="polite"><strong>{{ backend }} <i class="dot" :class="backend === 'Available' ? 'good' : 'neutral'"></i></strong><small>Database: {{ database }} · v{{ version }}</small></CollapsiblePanel>
       </section>
       <p v-if="socketError && mode === 'live'" class="connection-error" role="alert">{{ socketError }} <button @click="socket.reconnect()">Reconnect backend</button></p>
-      <div class="analysis-layout">
-        <section class="panel chart-panel" aria-labelledby="chart-title">
+      <div class="analysis-layout trading-layout">
+        <div class="market-column">
+        <CollapsiblePanel class="panel chart-panel" storage-key="chart" :title="`${selectedSymbol} · ${selectedInterval} price & volume chart`" aria-labelledby="chart-title">
+          <div class="market-controls" aria-label="Market chart selection"><div class="market-selectors"><label>MODE<select aria-label="Data mode" v-model="mode" @change="switchMode"><option value="live">Live</option><option value="replay">Replay</option></select></label><label>STOCK<select aria-label="Stock symbol" v-model="selectedSymbol" @change="switchSymbol"><option v-for="symbol in SYMBOLS" :key="symbol">{{ symbol }}</option></select></label><label>INTERVAL<select aria-label="Candle interval" v-model="selectedInterval" @change="switchInterval"><option v-for="interval in INTERVALS" :key="interval">{{ interval }}</option></select></label></div><button class="yahoo-reconnect" aria-label="Reconnect Yahoo feed" :disabled="reconnectingYahoo || mode !== 'live'" @click="reconnectYahoo">{{reconnectingYahoo?'Reconnecting…':'Reconnect Yahoo feed'}}</button></div>
+          <p v-if="yahooReconnectError" role="alert" class="history-error">{{yahooReconnectError}}</p><p v-else-if="yahooReconnectNotice" role="status" class="feed-reconnect-notice">{{yahooReconnectNotice}}</p>
           <div class="panel-toolbar"><div class="instrument"><span class="instrument-icon">{{ selectedSymbol.slice(0, 1) }}</span><div><h2 id="chart-title">{{ selectedSymbol }} <span>· {{ selectedInterval }}</span></h2><p>Yahoo Finance <span class="divider">/</span> Constructed quote candles</p></div></div><div class="chart-actions"><span v-if="historyState.loading" class="loading-label">Loading history…</span><label class="zoom-selector">Zoom<select aria-label="Visible candles" v-model.number="zoomCount" @change="changeZoom"><option :value="0">All history</option><option v-for="count in [10,25,50,100]" :key="count" :value="count">Latest {{ count }}</option></select></label><label class="follow-control"><input type="checkbox" aria-label="Follow latest candles" v-model="followLatest" :disabled="zoomCount === 0"> Follow latest</label><button aria-label="Fit chart to data" @click="fitAllCandles">Fit all</button></div></div>
           <div class="ohlc-legend" aria-label="Latest candle values"><span v-for="[label, key] in [['O','open'],['H','high'],['L','low'],['C','close']]" :key="key">{{ label }} <b>{{ number(lastCandle?.[key]) }}</b></span><span class="candle-state" :class="lastCandle?.candle_complete ? 'complete' : 'provisional'">{{ lastCandle ? (lastCandle.candle_complete ? 'Complete' : 'Provisional') : 'Awaiting candles' }}</span></div>
-          <MarketChart ref="chart" :visible-candles="zoomCount" :follow-latest="followLatest" :context="mode === 'replay' ? `replay:${replayState.generation}` : 'live'" :candles="chartRows" :symbol="selectedSymbol" :interval="selectedInterval" :loading="historyState.loading" :error="historyState.error" />
+          <div class="indicator-toolbar"><label><input type="checkbox" aria-label="Show SMA indicators" v-model="showIndicators"> SMA indicators</label><label><input type="checkbox" aria-label="Show Crossover Signals" v-model="showSignals"> Show Crossover Signals</label><label><input type="checkbox" aria-label="Show Simulated Fills" v-model="showFills"> Show Simulated Fills</label><span class="sma-fast">SMA(20) {{ number(indicatorData.latest?.sma20) }}</span><span class="sma-slow">SMA(50) {{ number(indicatorData.latest?.sma50) }}</span><span data-testid="crossover-status">{{ indicatorState.loading ? 'Calculating…' : (indicatorData.latest?.confirmed ? `Confirmed ${indicatorData.latest.signal}` : 'HOLD · waiting for completed history') }}</span><span v-if="indicatorData.latest?.confirmed" class="muted">{{ shortTime(indicatorData.latest.candle_open_timestamp) }}</span><span class="muted">Completed candles only · strategy execution is a separate opt-in</span></div><p v-if="indicatorState.error" class="history-error" role="status">{{ indicatorState.error }}</p>
+          <MarketChart ref="chart" :strategy-fills="mode === 'live' ? strategyFills : []" :indicators="indicatorData" :show-indicators="showIndicators" :show-signals="showSignals" :show-fills="showFills" :visible-candles="zoomCount" :follow-latest="followLatest" :context="mode === 'replay' ? `replay:${replayState.generation}` : 'live'" :candles="chartRows" :symbol="selectedSymbol" :interval="selectedInterval" :loading="historyState.loading" :error="historyState.error" />
           <div class="chart-footer"><span>{{ chartRows.length }} saved / received candles <b>Stored provenance: {{ chartModes || 'No data' }}</b></span><span>UTC · {{ selectedInterval }} · revisions preserved</span></div>
           <p v-if="historyOnly" class="interval-note">Saved {{ selectedInterval }} candles only. The backend currently constructs live {{ (liveIntervals || [configuredInterval]).join(', ') }} candles.</p>
           <p v-if="historyState.invalid" class="history-error">Some records lack valid OHLC and cannot be plotted.</p>
-        </section>
+        </CollapsiblePanel>
+        <details class="market-details" v-remember-panel="'market-details'"><summary>Market information &amp; candle details <span>Source timestamps, feed status, OHLC and provenance</span></summary>
         <aside class="market-sidebar">
           <section class="panel quote-panel"><p class="eyebrow">{{ selectedSymbol }} / MARKET INFORMATION</p><h2 data-testid="latest-price">{{ price }}</h2><p class="price-origin">{{ latest?.observation_type === 'raw_provider' ? 'Latest received quote' : (latest ? 'Last saved candle close' : 'No price received') }} <span>{{ latestQuote?.metadata?.original?.currency || 'Currency not supplied' }}</span></p>
             <div class="price-change" :class="hasChange ? ((providerChange.change ?? providerChange.change_percent) >= 0 ? 'positive' : 'negative') : 'muted'"><strong>{{ hasChange ? signed(providerChange.change) : '—' }}<template v-if="Number.isFinite(providerChange.change_percent)"> ({{ signed(providerChange.change_percent) }}%)</template></strong><span>Provider-reported change {{ !hasChange ? 'unavailable' : '' }}</span></div>
@@ -301,18 +387,22 @@ onUnmounted(() => {
           </section>
           <section class="panel candle-panel"><div class="section-heading"><h2>Current candle</h2><span>{{ selectedInterval }}</span></div><p class="muted candle-summary" data-testid="candle-summary">{{ lastCandle ? `${lastCandle.candle_interval} · ${lastCandle.candle_complete ? 'complete' : 'incomplete'} · r${lastCandle.revision}` : 'No candle available' }}</p><div class="candle-values"><div v-for="key in ['open','high','low','close']" :key="key"><span>{{ key }}</span><b>{{ number(lastCandle?.[key]) }}</b></div></div><dl class="detail-list compact"><div><dt>Opening · UTC</dt><dd>{{ shortTime(lastCandle?.candle_open_timestamp) }}</dd></div><div><dt>Stored provenance</dt><dd>{{ lastCandle?.data_mode || '—' }}</dd></div><div><dt>Volume</dt><dd>{{ lastCandle && reliableVolume(lastCandle) ? number(lastCandle.volume) : 'Unavailable / not inferred' }}</dd></div></dl></section>
           <p class="integrity-note"><span aria-hidden="true">◈</span> An open connection does not establish live or current market data. Prices remain labeled by their source and age.</p>
-        </aside>
+        </aside></details>
+        </div>
+        <PaperAccount docked :symbol="selectedSymbol" :latest-price="latest?.price ?? latest?.close ?? null" :feed-status="mode === 'replay' ? 'recorded replay' : visibleFeedState" :source-time="sourceTime || ''" :replay="mode === 'replay'" />
       </div>
-      <section class="panel observation-panel" aria-label="Observation information"><div><span class="eyebrow">LATEST OBSERVATION</span><b>{{ latestQuote ? `#${latestQuote.id} · revision ${latestQuote.revision || '—'}` : 'No raw observation received' }}</b></div><div><span class="eyebrow">SOURCE IDENTITY</span><b class="identity" :title="latestQuote?.source_observation_id">{{ latestQuote?.source_observation_id || '—' }}</b></div><div><span class="eyebrow">REGULAR SESSION</span><b>{{ readable(feed?.market_session) }}</b></div></section>
-      <section class="panel replay-panel" aria-labelledby="replay-title">
+      <CollapsiblePanel class="panel observation-panel" storage-key="observations" title="Observation information" aria-label="Observation information"><div><span class="eyebrow">LATEST OBSERVATION</span><b>{{ latestQuote ? `#${latestQuote.id} · revision ${latestQuote.revision || '—'}` : 'No raw observation received' }}</b></div><div><span class="eyebrow">SOURCE IDENTITY</span><b class="identity" :title="latestQuote?.source_observation_id">{{ latestQuote?.source_observation_id || '—' }}</b></div><div><span class="eyebrow">REGULAR SESSION</span><b>{{ readable(feed?.market_session) }}</b></div></CollapsiblePanel>
+      <CollapsiblePanel class="panel replay-panel" storage-key="replay" title="Market replay" :subtitle="mode === 'replay' ? readable(replayState.state) : 'Inactive · live mode'" aria-labelledby="replay-title">
         <div><p class="eyebrow">{{ mode === 'replay' ? 'REPLAY · READ-ONLY RECORDED DATA' : 'HISTORICAL WORKSPACE' }}</p><h2 id="replay-title">Market replay <span class="coming">{{ mode === 'replay' ? readable(replayState.state) : 'Select Replay mode' }}</span></h2><p class="muted">{{ mode === 'replay' ? 'Original timestamps and revisions. Live events are isolated.' : 'Switch to Replay to enable playback of saved observations.' }}</p><button v-if="mode === 'live'" class="open-replay" aria-label="Open replay" @click="mode = 'replay'; switchMode()">Open replay</button></div>
         <div class="replay-actions"><button aria-label="Play replay" :disabled="mode !== 'replay' || !replayCatalog?.event_count || ['playing','loading','paused'].includes(replayState.state)" @click="playReplay">▶ Play</button><button aria-label="Pause replay" :disabled="mode !== 'replay' || replayState.state !== 'playing'" @click="replayCommand('pause')">Pause</button><button aria-label="Resume replay" :disabled="mode !== 'replay' || replayState.state !== 'paused'" @click="replayCommand('resume')">Resume</button><button aria-label="Restart replay" :disabled="mode !== 'replay' || !replayLoaded" @click="replayCommand('restart')">Restart</button><button aria-label="Stop replay" :disabled="mode !== 'replay' || !replayLoaded" @click="replayCommand('stop')">Stop</button></div>
         <div class="replay-selection"><label>Start · UTC<input type="datetime-local" step="1" aria-label="Replay start UTC" v-model="rangeStart" @change="changeRange" :disabled="mode !== 'replay'"></label><label>End · UTC (exclusive)<input type="datetime-local" step="1" aria-label="Replay end UTC" v-model="rangeEnd" @change="changeRange" :disabled="mode !== 'replay'"></label><label>Ordering<select aria-label="Replay ordering" v-model="replayOrder" @change="changeRange" :disabled="mode !== 'replay'"><option value="receipt">Receipt time + ID</option><option value="arrival">Commit arrival ID</option></select></label><label>Speed<select aria-label="Replay speed" v-model.number="playbackSpeed" @change="changeSpeed" :disabled="mode !== 'replay'"><option v-for="speed in [.25,.5,1,2,5,10,25,50,100]" :key="speed" :value="speed">{{ speed }}×</option></select></label><button aria-label="Load replay selection" :disabled="mode !== 'replay' || !replayCatalog?.event_count" @click="loadReplay(false)">Load selection</button></div>
         <p v-if="replayError" class="replay-notice" role="alert">{{ replayError }}</p><p v-else-if="mode === 'replay' && replayCatalog && !replayCatalog.event_count" class="replay-notice">No saved observations for this symbol and interval. No demonstration prices are generated.</p><p v-else-if="rangeDirty && mode === 'replay'" class="replay-notice">Range changed. Load selection or Play to apply it.</p>
         <progress aria-label="Replay progress" :value="replayState.position || 0" :max="replayState.total || 1"></progress><div class="timeline-labels"><span data-testid="replay-progress">{{ mode === 'replay' ? `${replayState.position || 0} / ${replayState.total || 0} recorded events` : 'Live mode · replay inactive' }}</span><span>{{ mode === 'replay' ? `${playbackSpeed}× · snapshot #${replayState.snapshot_max_id ?? '—'}` : '' }}</span></div>
         <p v-if="mode === 'replay'" class="replay-record" data-testid="replay-record">{{ replayRecord ? `Record #${replayRecord.id} · ${replayRecord.observation_type} · revision ${replayRecord.revision} · source ${replayRecord.source_timestamp} · receipt ${replayRecord.received_timestamp}` : 'As-of baseline loaded; no playback event emitted yet.' }}</p>
-      </section>
-      <footer><span><i class="dot neutral"></i> MarketPulse · Assignment 4.1</span><span>Observation integrity first.</span></footer>
+      </CollapsiblePanel>
+      <StrategyPanel :symbol="selectedSymbol" :interval="selectedInterval" :replay="mode === 'replay'" @fills="value => strategyFills = value" />
+      <BacktestPanel :symbol="selectedSymbol" :interval="selectedInterval" />
+      <footer><span><i class="dot neutral"></i> MarketPulse · Assignment 4.2</span><span>Observation integrity first.</span></footer>
     </main>
   </div>
 </template>

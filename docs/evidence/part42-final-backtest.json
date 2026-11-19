@@ -1,0 +1,233 @@
+{
+  "data_kind": "saved provider-derived candles from a SQLite-aware backup; not a new live feed probe",
+  "configuration": {
+    "symbol": "AAPL",
+    "interval": "1m",
+    "start": "2026-11-09T00:00:00.000000Z",
+    "end": "2026-11-13T00:00:00.000000Z",
+    "candle_type": "constructed_candle",
+    "starting_balance": "10000",
+    "fast_period": 20,
+    "slow_period": 50
+  },
+  "input_hash": "b0e8d4ab07cbdc36286d4e1dfab77e8df5d28b893151d335220eb3b9e01575ff",
+  "snapshot_max_id": 141905,
+  "selected_candles": 327,
+  "confirmed_crossovers": 12,
+  "summary": {
+    "starting_equity": "10000.000000",
+    "ending_equity": "9996.525000",
+    "total_return_percent": "-0.0347500",
+    "realized_pl": "-5.100500",
+    "unrealized_pl": "1.625500",
+    "completed_trades": 5,
+    "fill_count": 11,
+    "win_rate_percent": "20.0",
+    "max_drawdown_percent": "0.1657518944286704424372801105",
+    "ending_cash": "8216.324500",
+    "open_quantity": 5
+  },
+  "quality": {
+    "incomplete_rows_excluded": 9467,
+    "later_completed_versions_excluded": 206,
+    "missing_interval_slots": 4011,
+    "warmup_before_start": false,
+    "completed_available_by_end": 327
+  },
+  "fills": [
+    {
+      "side": "BUY",
+      "quantity": 5,
+      "price": "355.300000",
+      "timestamp": "2026-11-11T21:25:00.000000Z",
+      "candle_id": 41121,
+      "signal_candle_id": 41040,
+      "signal_available_at": "2026-11-11T21:24:01.148320Z",
+      "fees": "0.000000",
+      "slippage_bps": 0
+    },
+    {
+      "side": "SELL",
+      "quantity": 5,
+      "price": "355.600000",
+      "timestamp": "2026-11-11T23:46:00.000000Z",
+      "candle_id": 50350,
+      "signal_candle_id": 49981,
+      "signal_available_at": "2026-11-11T23:44:00.534311Z",
+      "fees": "0.000000",
+      "slippage_bps": 0
+    },
+    {
+      "side": "BUY",
+      "quantity": 5,
+      "price": "356.210000",
+      "timestamp": "2026-11-12T00:48:00.000000Z",
+      "candle_id": 54364,
+      "signal_candle_id": 54253,
+      "signal_available_at": "2026-11-12T00:43:00.991052Z",
+      "fees": "0.000000",
+      "slippage_bps": 0
+    },
+    {
+      "side": "SELL",
+      "quantity": 5,
+      "price": "355.680000",
+      "timestamp": "2026-11-12T01:28:00.000000Z",
+      "candle_id": 60337,
+      "signal_candle_id": 59851,
+      "signal_available_at": "2026-11-12T01:27:00.628170Z",
+      "fees": "0.000000",
+      "slippage_bps": 0
+    },
+    {
+      "side": "BUY",
+      "quantity": 5,
+      "price": "355.900000",
+      "timestamp": "2026-11-12T17:38:00.000000Z",
+      "candle_id": 71388,
+      "signal_candle_id": 69514,
+      "signal_available_at": "2026-11-12T17:37:00.111972Z",
+      "fees": "0.000000",
+      "slippage_bps": 0
+    },
+    {
+      "side": "SELL",
+      "quantity": 5,
+      "price": "355.680000",
+      "timestamp": "2026-11-12T17:48:00.000000Z",
+      "candle_id": 80977,
+      "signal_candle_id": 79052,
+      "signal_available_at": "2026-11-12T17:47:00.071688Z",
+      "fees": "0.000000",
+      "slippage_bps": 0
+    },
+    {
+      "side": "BUY",
+      "quantity": 5,
+      "price": "355.670000",
+      "timestamp": "2026-11-12T17:53:00.000000Z",
+      "candle_id": 85608,
+      "signal_candle_id": 83798,
+      "signal_available_at": "2026-11-12T17:52:00.208841Z",
+      "fees": "0.000000",
+      "slippage_bps": 0
+    },
+    {
+      "side": "SELL",
+      "quantity": 5,
+      "price": "355.240000",
+      "timestamp": "2026-11-12T18:00:00.000000Z",
+      "candle_id": 88757,
+      "signal_candle_id": 86833,
+      "signal_available_at": "2026-11-12T17:59:00.455607Z",
+      "fees": "0.000000",
+      "slippage_bps": 0
+    },
+    {
+      "side": "BUY",
+      "quantity": 5,
+      "price": "355.950000",
+      "timestamp": "2026-11-12T18:38:00.000000Z",
+      "candle_id": 96740,
+      "signal_candle_id": 94800,
+      "signal_available_at": "2026-11-12T18:37:00.038789Z",
+      "fees": "0.000000",
+      "slippage_bps": 0
+    },
+    {
+      "side": "SELL",
+      "quantity": 5,
+      "price": "355.809900",
+      "timestamp": "2026-11-12T19:22:00.000000Z",
+      "candle_id": 138850,
+      "signal_candle_id": 136980,
+      "signal_available_at": "2026-11-12T19:21:00.460988Z",
+      "fees": "0.000000",
+      "slippage_bps": 0
+    },
+    {
+      "side": "BUY",
+      "quantity": 5,
+      "price": "355.715000",
+      "timestamp": "2026-11-12T19:23:00.000000Z",
+      "candle_id": 139797,
+      "signal_candle_id": 137927,
+      "signal_available_at": "2026-11-12T19:22:00.373857Z",
+      "fees": "0.000000",
+      "slippage_bps": 0
+    }
+  ],
+  "completed_trades": [
+    {
+      "entry_timestamp": "2026-11-11T21:25:00.000000Z",
+      "entry_price": "355.300000",
+      "quantity": 5,
+      "entry_candle_id": 41121,
+      "exit_timestamp": "2026-11-11T23:46:00.000000Z",
+      "exit_price": "355.600000",
+      "exit_candle_id": 50350,
+      "realized_pl": "1.500000"
+    },
+    {
+      "entry_timestamp": "2026-11-12T00:48:00.000000Z",
+      "entry_price": "356.210000",
+      "quantity": 5,
+      "entry_candle_id": 54364,
+      "exit_timestamp": "2026-11-12T01:28:00.000000Z",
+      "exit_price": "355.680000",
+      "exit_candle_id": 60337,
+      "realized_pl": "-2.650000"
+    },
+    {
+      "entry_timestamp": "2026-11-12T17:38:00.000000Z",
+      "entry_price": "355.900000",
+      "quantity": 5,
+      "entry_candle_id": 71388,
+      "exit_timestamp": "2026-11-12T17:48:00.000000Z",
+      "exit_price": "355.680000",
+      "exit_candle_id": 80977,
+      "realized_pl": "-1.100000"
+    },
+    {
+      "entry_timestamp": "2026-11-12T17:53:00.000000Z",
+      "entry_price": "355.670000",
+      "quantity": 5,
+      "entry_candle_id": 85608,
+      "exit_timestamp": "2026-11-12T18:00:00.000000Z",
+      "exit_price": "355.240000",
+      "exit_candle_id": 88757,
+      "realized_pl": "-2.150000"
+    },
+    {
+      "entry_timestamp": "2026-11-12T18:38:00.000000Z",
+      "entry_price": "355.950000",
+      "quantity": 5,
+      "entry_candle_id": 96740,
+      "exit_timestamp": "2026-11-12T19:22:00.000000Z",
+      "exit_price": "355.809900",
+      "exit_candle_id": 138850,
+      "realized_pl": "-0.700500"
+    }
+  ],
+  "equity_curve_points": 652,
+  "first_equity_point": {
+    "timestamp": "2026-11-09T19:08:00.000000Z",
+    "event": "open",
+    "candle_id": 6,
+    "equity": "10000.000000",
+    "cash": "10000.000000",
+    "quantity": 0
+  },
+  "last_equity_point": {
+    "timestamp": "2026-11-12T19:26:00.061955Z",
+    "event": "close",
+    "candle_id": 141747,
+    "equity": "9996.525000",
+    "cash": "8216.324500",
+    "quantity": 5
+  },
+  "all_original_tables_unchanged": true,
+  "identical_repeated_results_excluding_run_id": true,
+  "persistence": "only disposable backup backtest_runs updated",
+  "browser_display_verified": false
+}

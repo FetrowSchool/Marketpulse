@@ -1,0 +1,137 @@
+{
+  "date": "2026-11-12",
+  "data_evidence": "Saved provider-derived constructed candles, not a new live-provider probe",
+  "before": {
+    "observations": {
+      "count": 108941,
+      "sha256": "5211b577b533b7853b8d2527c928a7127f181346cab3636cad47ddc796698cbc"
+    },
+    "simulated_accounts": {
+      "count": 1,
+      "sha256": "350147f562d2dcb430b4f89f4b9d3184173650c4454108bddf964211e5eca033"
+    },
+    "paper_orders": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "paper_fills": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "paper_positions": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "strategy_config": {
+      "count": 1,
+      "sha256": "7a9b4a4f871afc5c860b3a71c3528bb32cb5b988c0ff26103468b4d170750a2d"
+    },
+    "strategy_scopes": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "strategy_signals": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "strategy_decisions": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "strategy_positions": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "strategy_order_links": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }
+  },
+  "after": {
+    "observations": {
+      "count": 108941,
+      "sha256": "5211b577b533b7853b8d2527c928a7127f181346cab3636cad47ddc796698cbc"
+    },
+    "simulated_accounts": {
+      "count": 1,
+      "sha256": "350147f562d2dcb430b4f89f4b9d3184173650c4454108bddf964211e5eca033"
+    },
+    "paper_orders": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "paper_fills": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "paper_positions": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "strategy_config": {
+      "count": 1,
+      "sha256": "7a9b4a4f871afc5c860b3a71c3528bb32cb5b988c0ff26103468b4d170750a2d"
+    },
+    "strategy_scopes": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "strategy_signals": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "strategy_decisions": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "strategy_positions": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "strategy_order_links": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }
+  },
+  "all_original_tables_unchanged": true,
+  "run_ids": [
+    1,
+    2
+  ],
+  "input_hash": "c1ced887dabbee9f4680016b2b6214f42f54e786b120a95d4815e4308f1f99e7",
+  "selected_candles": 292,
+  "summary": {
+    "starting_equity": "10000.000000",
+    "ending_equity": "9994.589000",
+    "total_return_percent": "-0.0541100",
+    "realized_pl": "-4.400000",
+    "unrealized_pl": "-1.011000",
+    "completed_trades": 4,
+    "fill_count": 9,
+    "win_rate_percent": "25.00",
+    "max_drawdown_percent": "0.1643782875407761448339094490",
+    "ending_cash": "8215.850000",
+    "open_quantity": 5
+  },
+  "quality": {
+    "incomplete_rows_excluded": 7537,
+    "later_completed_versions_excluded": 173,
+    "missing_interval_slots": 4011,
+    "warmup_before_start": false,
+    "completed_available_by_end": 292
+  },
+  "identical_results_excluding_run_id": true,
+  "automatic_trading_enabled": false,
+  "integrity": {
+    "ok": true,
+    "sqlite_integrity": [
+      "ok"
+    ],
+    "foreign_key_violations": 0,
+    "revision_gap_groups": 0,
+    "invalid_metadata_ids": [],
+    "invalid_metadata_count": 0,
+    "observation_count": 108941
+  },
+  "note": "Historical toy simulation only; not evidence of future returns or real executions."
+}

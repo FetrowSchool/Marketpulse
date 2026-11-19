@@ -907,3 +907,551 @@ two connection attempts. Real network access was explicitly requested by the use
 - The intended second commit changes report.md only, recording the first commit as the
   submitted implementation reference. The report is intentionally not updated again
   to point at the second commit. GitHub history supplies the final publication evidence.
+
+## 2026-11-12 — Part 4.2 SMA indicators and crossover signals
+
+### Request, branch and design
+- User authorized Part4.2 indicators/crossovers only and requested a new Part2 branch.
+  Created/published `codex/part-2` from main (spaces normalized and standard codex prefix).
+  Implementation changes remain uncommitted; no main changes, trading or backtests added.
+- Inspected instructions, schema/identity docs, persistence/history/socket services,
+  frontend revision book, replay, chart lifecycle and viewport/tests before modification.
+- Backend indicator service calculates20/50 completed-close averages with Decimal, resolves
+  latest identity revisions/canonical openings and sorts source time. Source/type/mode
+  transitions reset windows. No values for incomplete candles and no provisional signals.
+- BUY previousfast<=slow/currentfast>slow; SELL previousfast>=slow/currentfast<slow;
+  current equality HOLD. At least51 completed candles allow a crossing. Remaining on one
+  side emits HOLD. Stable per-candle signal IDs and full snapshot replacement prevent
+  duplicates; corrections can change/retract a marker while original observations survive.
+- Added GET config/SMA/signals plus POST evaluate for arrived chart snapshots. Read-only
+  GETs use max-ID/as-of boundaries; replay POST never reads future SQLite revisions.
+  Same local CORS origins retained, with POST enabled for this concrete evaluation API.
+- Vue coalesces requests, ignores stale results, clears obsolete overlays and displays
+  errors independently. SMA20 blue/SMA50 gold LineSeries and confirmed arrows share the
+  price pane; visibility toggle, legend and latest completed status added. Existing volume,
+  attribution, selection/zoom and replay remain in the same component architecture.
+
+### Reference and tests
+- Manual closes1..50: last20=31..50 =>40.5; last50 sum1275 =>25.5. First50th candle
+  cannot cross without the previous slow SMA. Independent Fraction reference verifies
+  every available value for closes1..80 rather than duplicating Decimal calculations.
+- Fifty100s followed by120 => SMA20=101, SMA50=100.4, BUY; followed instead by80 =>99,
+  99.6, SELL. Repeated same-side closes produce HOLD. Tests cover equality, insufficient
+  history, opposite crossing, incomplete completion, revisions/retractions, duplicates,
+  reverse arrival, mode/symbol/interval isolation, as-of queries and read-only replay.
+- Added frontend request selection/error/replay-context regression, completion/status/
+  visibility tests, and line/marker replacement tests including retained price/volume
+  chart operations. Installed Lightweight Charts typings confirmed supported API use.
+- First backend run:129 passed/1 failed. Fixture incorrectly passed revision into the
+  persistence API (which allocates revisions); removed that fixture argument. No production
+  revision allocation change or overwrite workaround was used.
+- Temporary verification copy lacked package.json, pytest.ini and index.html when this
+  stage began. First npm attempt failed ENOENT; after manifest restoration31 frontend tests
+  passed but build failed missing index.html. Restored documented source files and reran.
+  No dependency upgrade/install was needed; these were temporary-copy setup failures.
+- Final source-matched /private/tmp/marketpulse-final-review commands:
+  `cd backend && ../.venv/bin/python -m pytest`: **132 passed,0 failed,0 skipped**,2.84s,
+  one existing Starlette/httpx deprecation warning.
+  `cd frontend && npm test && npm run build`: **33 passed,0 failed,0 skipped**,8 files,
+  820ms; production build passed, Vite7.3.7,23 modules,440ms.
+
+### Saved-data API and browser evidence
+- Restarted existing backend against its preserved capture DB with TLS verification.
+  GET /api/indicators/sma returned actual saved Yahoo candle history and crossings.
+  No new live-provider pipeline verification is claimed for this stage.
+- Independent read-only Fraction check of the last20/50 completed stored closes matched
+  API SMA20=355.6211 and SMA50=355.63564,248 completed candles,5 unique signal IDs,
+  snapshotmax69460. Original source/receipt/identity/revision and result are retained in
+  evidence/part2-indicator-verification.json. This is genuine saved-provider evidence,
+  not a synthetic fixture or a new live signal execution.
+- Browser automation failed with native connection unavailable on existing-tab access.
+  Reset and new-tab retry failed identically. No native visual/marker/volume/replay browser
+  verification or new screenshot is claimed. API, Vue component, adapter tests and build
+  passed; visual inspection remains outstanding until browser automation reconnects.
+
+### Files and limitations
+- New backend app/services/indicators.py, app/routes/indicators.py, tests/test_indicators.py;
+  new frontend src/services/indicators.js and tests/indicators.test.js; new docs/indicators.md
+  and saved-data verification JSON. Updated app/main.py, Vue App/MarketChart/chartRenderer,
+  CSS and related frontend tests; README, AGENTS, design, architecture/database docs,
+  AI-USE and this log. Existing report.md was not rewritten.
+- No schema migration, persisted signal ledger, trades, positions, backtest engine or
+  Part4.3 module. Derived signals are analytical views, not recommendations. Windows
+  are limited to1000 retained candles, with fresh warm-up on that window/provenance run;
+  rapid replay may briefly wait for a current coalesced API response. Existing source
+  quality/volume/calendar limits remain. Exactly-once execution would need a future
+  separate durable ledger; marker identity is not a trade ledger.
+
+## 2026-11-12 — Manual simulated account, orders, fills and accounting
+
+### Request, scope and implementation
+- User authorized a persistent$10,000 SIMULATED account and manual orders/accounting only.
+  Inspected existing instructions, schema/init service, routes, indicator work, Vue dashboard
+  and tests. Preserved all earlier uncommitted work on codex/part-2; report.md unchanged.
+- Added app/paper_schema.sql as a transactional additive component schema with its own
+  accounting_schema_version1. Original schema_version1 and append-only market rows remain
+  intact. Seed account insertion is OR IGNORE, never a reset/top-up. Tables cover account,
+  pending/filled/rejected/canceled orders, unique immutable fills and current positions.
+- services/paper_account.py owns manual reference-price execution, idempotency and exact
+  accounting; routes/paper.py adds account/position/order/fill/trade GETs and explicit
+  submission/execute/cancel POSTs. No brokerage, signal subscription, automatic trade or
+  backtest. Optional signal reference is metadata, not an execution trigger.
+- Long-only whole shares, no leverage/shorts, fees0/slippage0. Pending orders reserve
+  nothing, retain their creation reference price and revalidate funds/shares on manual Fill.
+  Invalid request422 creates no order; insufficient cash/shares persists rejected with
+  no fill/account change. Terminal order transitions/details and fill records are protected.
+- All money is integer micro-USD. Buy cost adds to remaining basis; partial sales allocate
+  exact rational basis with half-even unit rounding; full close releases all residual.
+  Average price is display-only, never used for cost release. Realized P/L is not added
+  to cash twice. Saved source marks produce unrealized/equity; missing marks stay null.
+- client_order_id/request hash is unique; identical retries return original order and
+  filled execute retries return the original fill. Conflicting keys409. BEGIN IMMEDIATE
+  serializes balance validation and writes; unique order fill guards double execution.
+- PaperAccount.vue adds balances, manual price/quantity/side form, pending Fill/Cancel,
+  positions with mark age/provenance, and order/fill histories below the usable chart.
+  Lost-response retries reuse their client identity. Replay disables submit/fill; account
+  is neither replayed nor reset. Account failures leave the market/chart subsystem usable.
+
+### Known references and actual automated results
+- Independent numerical example: buy10x100 and10x120 =>20 shares/basis2200/avg110/cash7800.
+  Mark130 =>equity10400/unrealized400. Sell5x140 =>cash8500/realized150/basis1650; remaining
+ 15x130 =>unrealized300/equity10450=10000+150+300. Close15x90 =>cash/equity9850,
+  cumulative realized−150, unrealized0. Test assertions match these manual figures.
+- Precision example: buy1x0.100001+2x0.100000, sell individually at0.200000 =>basis
+  released0.300001, realized0.299999, cash10000.299999. Exact half-even ties and large
+  integer allocation tested independently of displayed rounded averages.
+- Added tests for initial/unpriced account, buys/sells/partial/final close, quantities,
+  invalid symbols/sides/prices, fees/slippage, retained rejections, pending/cancel,
+  duplicate/conflicting/concurrent requests, competing buys without overspend, rollback
+  on injected fill failure, restart/initialization, market-row preservation, API errors,
+  missing valuation, Vue manual actions/replay guard and lost-response idempotency.
+- First full run passed157 backend/36 frontend and build. Added exact-allocation/quote
+  rounding and distinct-buy concurrency tests; final verification in source-matched
+  /private/tmp/marketpulse-final-review:
+  `cd backend && ../.venv/bin/python -m pytest`: **159 passed,0 failed,0 skipped**,4.11s;
+  one existing Starlette/httpx deprecation warning.
+  `cd frontend && npm test && npm run build`: **36 passed,0 failed,0 skipped**,9 files,
+  1.70s; Vite7.3.7 build passed,24 modules,834ms. No new package/dependency installed.
+- All executed test trades used temporary test DBs; none were executed in the user account.
+
+### Actual migration/API evidence and browser limitations
+- Gracefully stopped the prior backend, created a SQLite-aware backup outside the repo,
+  and hashed every saved observation before two initializations. All **85,607 rows**
+  retained ordered-row SHA-256
+  `d5d4077662b47c734127b70773015b03f7553123841c1dd758f86b59135dad0d`.
+  Integrity/FK/revision audits passed. See evidence/paper-account-migration.json, including
+  serialization details. Existing market rows and revisions were not updated or dropped.
+- Restarted the actual backend with the additive schema. GET /api/paper/account returned
+  modeSIMULATED, starting/cash/equity10000.000000, realized/unrealized0, no positions,
+  no orders/fills. This verifies startup/account initialization; not a real trade claim.
+- CUA inventory worked for native apps but reported no browser connection/native pipe.
+  A native Safari fallback timed out/reset its kernel. No successful visual account,
+  order-form or new screenshot is claimed. API/component/renderer regression tests and
+  build passed; visual browser verification remains outstanding.
+- The native fallback caused a long tool timeout; after it returned, continued with
+  documentation and final checks. No user-account order was submitted during that attempt.
+
+### Files and remaining limits
+- New backend app/paper_schema.sql, services/paper_account.py, routes/paper.py and
+  tests/test_paper_account.py. Updated services/database.py and app/main.py.
+- New frontend components/PaperAccount.vue and tests/PaperAccount.test.js; updated
+  App.vue/style.css. Updated README, AGENTS, design, architecture/database/indicator docs,
+  AI-USE and this log. Added docs/paper-trading.md and migration JSON evidence.
+- Single local USD account, no auth/multiple accounts, no reset/deposits/withdrawals;
+  history UI latest100/API max1000 per response. Manual prices may differ from markets;
+  no liquidity/spread/partial-fill model. Quotes can be stale; unpriced equity is unknown.
+  Micro-unit rounding is documented; average display rounding does not drive accounting.
+  No automatic trading, backtest, real brokerage or new report/commit was added.
+
+## 2026-11-12 — Confirmed SMA crossover → automatic SIMULATED account
+Prompt: connect completed-candle SMA20/50 crossings to opt-in simulated execution,
+20% whole-share BUY/full managed SELL, subsequent-price timing, persistent idempotency,
+replay isolation, controls, audit trail and tests; no backtesting.
+
+Files: strategy_schema.sql; services/strategy.py; routes/strategy.py; database.py;
+paper_schema.sql; paper_account.py; main.py; StrategyPanel.vue; App.vue; MarketChart.vue;
+chartRenderer.js; PaperAccount.vue; style.css; test_strategy.py; StrategyPanel.test.js;
+chartRenderer/MarketChart tests; README/design/architecture/database/strategy/paper-trading/
+indicators/AGENTS/AI-USE documentation and this evidence log. Earlier indicator/manual
+account changes also remain uncommitted on codex/part-2. report.md was not modified.
+
+Decisions: first latched signal per scope/candle, no historical catchup on enable,
+next eligible observed source/receipt time after confirmation, pooled average cost with
+separate strategy share ownership, one transaction for execution/account/decision.
+Recorded replay never invokes engine. Disable cancels pending decisions but retains
+shares; explicitly enabled configuration persists restart. Historical next-open helper
+is timing policy only, not a historical execution runner.
+
+Failure/fix: initial frontend run38passed/1failed exposed that chart's reactive watcher
+forwarded only two marker arguments; fixed to forward strategy fills on updates as well
+as initialization. Final expanded suite: `cd backend && ../.venv/bin/python -m pytest`
+**173passed** (6.32s; existing Starlette/httpx deprecation); `cd frontend && npm test &&
+npm run build` **39passed/10files**, successful Vite7.3.7 production build (25modules).
+All strategy prices/examples are deterministic fixtures, not provider/live evidence.
+
+Migration: SQLite-aware backup to /private/tmp/marketpulse-before-strategy.sqlite3,
+two initializations, before/after row hashes identical for89,807 observations and all
+account/order/fill/position rows. Integrity ok, no FK violations/revision gaps. Exact
+JSON: evidence/strategy-migration.json. Legacy nonempty fill migration separately tested.
+Running backend restarted successfully; auto remainsOFF and no user-account test orders
+were placed. No new live automatic fill is claimed.
+
+Browser: CUA inventory failed with `native pipe path unavailable: No such file or directory`.
+No successful visual workflow/screenshot is claimed. Frontend controls, isolation and
+fill-vs-signal markers were verified by automated tests. Remaining limits: one active
+scope, no offline catchup/historical runner, no exchange liquidity model, no per-strategy
+P/L, browser visual review still outstanding. These tests establish behavior, not returns.
+
+
+Final read-only runtime check: GET /api/strategy/status returned SIMULATED, enabled=false,
+state=disabled, SMA20/50 allocation20%, no signals/decisions/actions, cash/equity$10,000
+and no positions.17 implementation/test files matched the tested temporary copy byte for
+byte. The first local curl was blocked in the sandbox; the authorized host-local retry
+succeeded. Documentation script initially used unavailable `python`, then completed with
+`python3`; these tooling failures did not change application behavior.
+
+## 2026-11-12 — Isolated historical SMA backtesting
+Prompt: event-driven stored-candle backtesting, shared crossover rules, configurable
+balance/periods/range, next-open20% whole-share execution, isolated persisted results,
+metrics/equity/trade UI, deterministic verification and bias documentation.
+
+Inspected AGENTS.md, observation/schema docs, indicator calculator, automatic strategy,
+paper accounting, app factory/routes and Vue dashboard/tests before modifying. Files:
+backtest_schema.sql; services/backtests.py; routes/backtests.py; tests/test_backtests.py;
+indicators.py (shared sma_step); paper_account.py (shared allocation_quantity); strategy.py
+(shared sizing call); database.py/main.py wiring; BacktestPanel.vue/test; App.vue/style.css;
+README/design/AGENTS/AI-USE; architecture/database/strategy/backtesting docs; this log and
+evidence/backtest-verification.json. Earlier Part4.2 work remains uncommitted; report.md
+was not changed. No dependency installation or Yahoo downloader was introduced.
+
+Decisions: first completed receipt/ID per opening; exclude later revisions, never final
+corrected-history lookahead. Completion availability=max(interval end,receipt). Late older
+completions cannot rewrite past decisions/marks. Shared SMA equality rules and exact20%
+sizing; opening-only fills after signal availability. No warm-up before range. Zero
+commission/slippage and no forced liquidation. Completed trades mean closed round trips,
+not fills. No account/strategy call or live broadcast from the backtest engine.
+
+Verification environment: matching source copy /private/tmp/marketpulse-final-review
+with its installed Python3.13.15/Vite7.3.7 dependencies, because workspace dependency reads
+have previously stalled. First full run190backend/42frontend passed; added provider-origin
+and retrospective-availability tests, then final backend suite **192passed**,1existing
+Starlette/httpx deprecation warning (4.37s). Frontend `npm test && npm run build`:
+**42passed/11files**, production build passed,26modules (1.07s). No test failures occurred
+in this stage. Tests use explicitly simulated fixtures; no provider connection dependency.
+Known fast2/slow3 example independently verifies133shares at15→9, loss798,
+ending equity9202, return−7.98%, drawdown9.31%; default20/50 matches existing indicators.
+
+Saved-data verification: SQLite-aware backup /private/tmp/marketpulse-before-backtests.sqlite3,
+two initializations, two identical runs excluding run ID,292 first-completed AAPL1m
+candles. Original108,941 observations and all account/strategy rows remained byte-equivalent
+by ordered-row hashes; automaticOFF; no main account orders/fills created. Integrity ok,
+foreign-key/revision audits pass. Exact metrics/fingerprint/row hashes are recorded in
+evidence/backtest-verification.json. These are saved-provider-derived observations, not
+a new live-feed probe and not evidence of future profitability. New results only are
+persisted in backtest_runs. Backend restarted successfully on127.0.0.1:8000.
+
+Browser inventory was attempted through CUA and failed: native pipe path unavailable.
+No new screenshot/visual workflow verification is claimed. Frontend behavior is covered
+by tests. Remaining limits include incomplete local history, conservative receipt timing,
+no Yahoo historical downloader, market-calendar/corporate-action coverage, simplified
+liquidity/slippage, survivorship bias and parameter overfitting; details in backtesting.md.
+
+
+Final runtime check: GET /api/backtests/1 restored the saved292-candle BACKTEST result;
+GET /api/strategy/status confirmed enabled=false and live account cash$10,000. Fourteen
+changed implementation/test files match the tested runtime copy byte-for-byte. Frontend
+was rerun after clarifying the live panel's separate-backtest label and making SVG x
+coordinates proportional to UTC elapsed time;42 tests and build passed again.
+
+## 2026-11-12 — Part4.2 verification and CI
+Prompt: independently verify batch/incremental SMA20/50, full strategy/accounting/backtest
+paths, browser UI, push/PR GitHub Actions, and document actual outcomes; no Part4.3.
+Inspected AGENTS.md, existing test files, requirements/lock manifests, app config and
+indicator/strategy/account/backtest components before making changes.
+
+Changed/new files: .github/workflows/ci.yml; backend/scripts/verify_references.py;
+backend/tests/test_reference_verification.py; test_strategy.py; test_paper_account.py;
+test_backtests.py; docs/verification.md; evidence/sma-reference-verification.json;
+README/AGENTS/design/architecture/indicators/AI-USE documentation and this log. Production
+behavior/schema, report.md and user persistent account were not modified.
+
+Reference: six synthetic60-close datasets; exact Fraction batch and rolling sums plus
+pandas3.1.1 rolling means compared with app batch/incremental helper. Expected boundary
+values are in verification.md and measured JSON, including rising1..50 SMA20=40.5,
+SMA50=25.5;50constant100 then120→101/100.4 BUY; next80→100/100 HOLD; next80→99/99.6 SELL.
+Tolerance absolute1e-9 USD, relative0; observed max2.3283064365386963e-10 (bound-price
+fixture), zero for the other five datasets. Insufficient/window/missing/incomplete/
+revision behavior is tested separately. No reference values were invented as test results.
+
+Full-path trace tests assert confirming candle FK, SMA values, signal ID, decision,
+order/fill IDs, execution quote link and16-share/cash8000 outcome. A second hand table
+checks3@99.80+7@102.10 cost1014.10, partial4@104.20 realized11.16, cash9402.70,
+remaining6 marked103 unrealized9.54/equity10020.70; rejections preserve state/fees0.
+Entire14-event backtest curve is checked against10000×9,9069×3,9202×2 with
+next-bar IDs4→5/6→7 and drawdown9.31%. Existing replay/restart/duplicate tests remain.
+
+Actual commands in /private/tmp/marketpulse-final-review (matching source; existing
+installed dependencies): `cd backend && ../.venv/bin/python -m pytest`: **204passed**,
+6.30s,1existing Starlette/httpx deprecation. `../.venv/bin/python scripts/verify_references.py
+--output <workspace>/docs/evidence/sma-reference-verification.json`: passed and saved
+measured expected/actual/error values. `cd frontend && npm test && npm run build`:
+**42passed/11files**,1.27s; Vite7.3.7 build succeeded,26modules/618ms. `python -m pip check`:
+no broken requirements (sandbox pip cache warning only). No live Yahoo dependency.
+
+CI: official checkout/setup-python/setup-node documentation inspected; workflow usesv7,
+Ubuntu24.04/Python3.13/Node24, locked installs, Yahoo disabled, push/PR/manual triggers,
+read-only contents permission, cache paths and15-minute timeout. Local Ruby YAML parse
+and event/feed assertions passed. Initial ad-hoc validator wrongly expected10 steps;
+corrected to validate actual9-step workflow semantics. No pytest/Vitest failures occurred.
+An old pandas documentation URL returned404; current official typing.Rolling.mean path
+was found. No GitHub-hosted execution/green check is claimed; files remain uncommitted.
+
+Browser: CUA listBrowsers attempted; native pipe path unavailable. No page rendered or
+manual UI orders executed and no screenshot/visual verification claimed. Browser checklist
+for overlays/markers/toggles/account/manual/auto/history/backtest/equity/replay/feed remains
+explicitly blocked in verification.md; automated jsdom/API coverage is separate. No user
+account trade, feed restart, commit/push, dependency update or Part4.3 changes were made.
+
+
+Source-copy audit initially found legacy backend/scripts/verify_database.py absent from the temporary tree (no content differences elsewhere). Restored this unchanged, unrelated standalone script; final comparison: 74 app/test/script/frontend files match byte-for-byte. This audit assertion was separate from passing pytest/Vitest runs. Compact actual-results summary: evidence/part2-verification-summary.json.
+
+## 2026-11-12 — Final Part4.2 requirements audit
+Prompt: inspect all22requirements; trace observations→completed candles→SMAs→signals→
+decisions→orders→fills→account, representative backtest, exact tests/build/CI/browser and
+simulation/security checks; update docs, no report creation/commit/Part4.3.
+
+Inspected conventions, tracked source/manifests, services/routes/frontend chart/panels,
+existing tests/reference/architecture/schema docs and local workflow. Corrected stale
+“no trading/backtest” prose in architecture/design/indicators/paper-account docs and the
+strategy timing-helper docstring. No behavioral code/schema change was necessary.
+New review: docs/part-4.2-review.md; evidence/part42-final-trade-trace.json,
+part42-final-backtest.json, part42-final-audit.json. Updated README/AGENTS/design,
+architecture/verification/indicators/paper-trading/AI-USE docs and this log. Existing
+report.md unchanged (SHA25697718b1ce455461c2610d5427183aaa2f266149cbff538fe0070138f992f6a74).
+
+Executed real app callbacks in a new temporary fixture DB:50completed100closes;
+source120 at15:50:30 received15:50:31 stays incomplete/no order; completion at15:51:00.500
+confirms SMA101/100.4 BUY and waits with no order. Source125 at15:51:01 received15:51:02
+executes16shares, cost2000, cash8000, equity10000, realized/unrealized0, fees0. Confirming
+candle/inputs/signal/decision/quote/order/fill IDs and original payloads saved in trace.
+Duplicate quote leaves one fill. Explicit synthetic fixtures, not live-provider evidence.
+
+Saved-data run used a SQLite backup in another disposable DB: AAPL1m,Nov9–13exclusive,
+SMA20/50,10000initial;327first-completed candles,12crossings,11fills,5round trips,
+652equity events; cash8216.324500/5open shares, equity9996.525000, realized−5.100500,
+unrealized+1.625500, return−0.0347500%, win rate20%, maximum drawdown0.1657518944…%.
+Two runs matched excluding ID; all11 market/account/strategy tables in backup retained
+same hashes. User's actual database/account never received audit orders/backtest writes.
+Exact result/histories/quality: part42-final-backtest.json. Not a profitability claim.
+
+Actual checks in matching /private/tmp/marketpulse-final-review:
+- First full pytest204passed/1existing Starlette-httpx warning,6.57s; after docstring
+  correction rerun204passed/1warning,5.19s.
+- Reference probe rerun passed; measured output identical to saved360point evidence.
+- npm test42passed/11files,1.30s; npm run build passed,26modules/573ms.
+- Local Ruby YAML parse, push/PR events, disabled feed and working-directory checks pass.
+- Read-only local HTTP: healthok/databaseconnected/version0.1.0, Vite HTML received,
+  feedreal_time_unverified, automaticOFF, user accountcash10000. No browser proof inferred.
+
+GitHub connector initially rejected wrong repository argument name, then corrected
+read-only request returned workflow_runs=[] for HEAD90cb7a00a7c9f56125fb1fd35b9140edf2a7511b.
+Workflow is still local/untracked, no hosted pass claimed. Branchcodex/part-2; no commits
+or pushes. Browser inventory again failed with native pipe path unavailable. All Part4.2
+visual checks remain blocked, and old Part4.1 images were not repurposed as evidence.
+
+Security:103tracked files, no tracked .env/databases/dependency dirs; scoped common
+credential/private-key patterns in tracked text plus current app/workflow found0paths.
+All-local-ref filename history check for *.sqlite*,*.db,.env returned0matches (slow but
+completed). Not a full historical secret-content scanner. No broker SDK/routing found;
+incomplete/replay/duplicate/isolation/account tests pass. Part4.3 not begun.
+
+Outstanding: actual Part4.2 browser workflow, explicit commit/push and hosted CI check,
+submitted Part4.2 hash, accessible30–60second Part4.2 video, and later requested report.
+No false completion claim is made. Current scope/status matrix and file list are in the
+review; earlier actual marker-forwarding/validator/source-copy failures remain recorded.
+
+
+## 2026-11-12 — Chart-side simulated account / manual trading layout
+Prompt: make the simulated account easier to see and trade while watching candles.
+Inspected AGENTS.md, App.vue layout, PaperAccount.vue state/order handling, chart sizing,
+CSS breakpoints and existing frontend tests before changing presentation.
+
+Files: frontend/src/App.vue; components/PaperAccount.vue; style.css;
+frontend/tests/PaperAccount.test.js; README/design/architecture/AI-USE docs and this log.
+Desktop chart left, sticky340–360px account/ticket right; one component/state/GET refresh
+cycle and idempotent manual form. Account balance/P&L, selected-symbol ownership, current
+displayed reference+feed/time and indicative cost/proceeds visible in rail. Full-width
+positions/orders/fills next row. Market metadata expandable; replay/strategy/backtest
+remain below. <=820px stacks chart/ticket/ledger with no sticky inner scrolling. Existing
+manual pricing, pending orders, replay restrictions and backend accounting are unchanged.
+
+Tests: initial42frontend passed/build; added meaningful selected-symbol/price-reset/
+reference-estimate/no-automatic-POST/replay regression, final **43passed/11files** (938ms),
+Vite7.3.7 build passed/26modules (436ms). Tested in matching dependency-equipped temporary
+copy, synchronized to running Vite. No failed test or invented visual result. Backend
+suite also rerun; final result recorded below.
+
+CUA attempted running app tab via getTab; native pipe path unavailable. No successful
+browser inspection or screenshot is claimed; desktop/mobile visual QA remains pending.
+No new dependency, broker/real money, strategy enable action, account reset, report rewrite,
+commit or user-account test trade was performed. This is a presentation change only.
+
+
+Final backend regression: `cd backend && ../.venv/bin/python -m pytest` **204passed**,
+4.64s, one existing Starlette/httpx deprecation warning. Four modified frontend source/test
+files matched the tested/running temporary copy byte-for-byte. Browser verification remains
+blocked; no claim about observed pixel/layout quality is made.
+
+## 2026-11-12 — Hide/Show controls across dashboard windows
+Prompt: extend market-information/candle-details collapse behavior to all windows.
+Files: frontend/src/components/CollapsiblePanel.vue; App.vue; PaperAccount.vue;
+StrategyPanel.vue; BacktestPanel.vue; style.css; tests/CollapsiblePanel.test.js;
+tests/PaperAccount.test.js; README/design/architecture/AI-USE docs and this log.
+
+Shared native details/summary wraps the chart, four status cards, simulated account and
+activity ledger, observations, replay, automatic strategy and backtest. Main panels
+initially open; existing market details stays closed. Inner position/order/fill tables
+also have disclosure headers. Slot content remains mounted. Status/refresh/streams keep
+running, no strategy order or replay command occurs on toggle; strategy ON/OFF remains
+visible in collapsed summary. Collapsed state is local, not persisted across reloads.
+
+First frontend run44passed/1failed: test used a static input value=empty-string slot,
+which Vue correctly reapplied on slot rerender. Revised the fixture to use a real parent
+v-model draft, matching application form ownership; also exercised the real paper ticket
+collapse→account refresh→reopen retaining quantity/reference price and no automatic POST.
+Final `npm test && npm run build`:45passed/12files (983ms), successful Vite7.3.7 build,
+27modules/439ms. Backend pytest204passed/1existing Starlette-httpx warning,5.71s.
+Checks ran in matching /private/tmp/marketpulse-final-review using existing dependencies.
+
+CUA getTab on the running local app failed: native pipe path unavailable. No rendered
+browser inspection/screenshot is claimed. No backend behavior/dependency, live account
+trade, strategy enable action, report rewrite, commit or Part4.3 work was introduced.
+
+
+## 2026-11-12 — Remember hidden windows and shrink collapsed status cards
+Prompt: preserve hidden-window choices on refresh; top four cards currently hide text
+but retain their square height. Inspected CollapsiblePanel, all panel usages/native
+details, status-grid CSS and disclosure tests.
+
+Files: frontend/src/services/panelPreferences.js; components/CollapsiblePanel.vue;
+App.vue; PaperAccount.vue; StrategyPanel.vue; BacktestPanel.vue; style.css;
+tests/CollapsiblePanel.test.js; tests/panelPreferences.test.js; README/design/architecture/
+AI-USE documentation and this log. Stable versioned browser-local keys cover all main
+panels plus native market details, account assumptions/position/order/fill sections and
+backtest histories. Only open/closed preferences are stored. Header titles/symbol/mode
+changes do not change identity. Blocked/full/malformed storage falls back safely.
+
+CSS fix: status-grid align-items:start and closed status-card auto-height/min-height0
+prevent grid stretching; cards shrink to header bars so controls remain available.
+Tests verify close→unmount→remount restores state, opening saves again, changed titles
+retain identity, independent native disclosures restore, and storage failures do not throw.
+Actual results in matching /private/tmp/marketpulse-final-review: backend204passed,
+1existing Starlette/httpx deprecation,5.44s; frontend48passed/13files,1.19s;
+Vite7.3.7 production build passed/28modules,468ms. No test failures in this stage.
+
+CUA attempted getTab for local app; native pipe path unavailable. No browser screenshot
+or rendered sizing verification is claimed. No backend behavior, account/order/strategy
+setting, dependency, report, commit or Part4.3 changes. Same-origin browser storage is
+required; clearing site data removes layout preferences.
+
+
+## 2026-11-12 — Move market selectors into the chart panel
+User requested Live/Replay, stock company and1/5/15-minute controls on the market panel itself. Moved the existing three bound selectors from topbar to a chart-local toolbar in frontend/src/App.vue; added responsive market-selector CSS in style.css. Existing switch handlers and selection behavior are unchanged. Updated README/design/architecture and this log. Running Vite source synchronized. Backend204passed/1existing warning (6.49s); frontend48passed/13files (1.44s); production build passed/28modules (555ms), using matching temporary runtime. No test failures, new tests/dependencies, backend/account changes, report/commit or Part4.3 changes. Browser visual verification remains unavailable and was not newly claimed.
+
+## 2026-11-12 — In-app Yahoo feed reconnect/recovery
+Prompt: reactivate Yahoo from the app rather than requiring agent intervention.
+Inspected MarketDataService start/stop/run/completion, repository transactions, market
+API, chart selectors and existing lifecycle/UI tests. Files: services/market_data.py;
+routes/market.py; backend/tests/test_feed_reconnect.py; App.vue; style.css;
+frontend/tests/App.test.js; README/design/architecture/AI-USE and this log;
+evidence/feed-reconnect-verification.json.
+
+Added explicit serialized stop/probe/reset/start recovery, runtime enable for a disabled
+feed,3second repeated-request coalescing and idempotent start guard. Preserves source/
+receipt/dedup/repositories and user account/strategy settings. POST /api/market/reconnect
+returns202 request status,503 storage error or403 untrusted Origin. UI button beside
+market selectors shows pending/error/connection-requested, disabled in replay; no fake
+live status or quote. Automatic bounded provider retries remain unchanged.
+
+Deterministic tests: disabled-feed enable, concurrent clients→one stream, old close before
+new connection, task count, DB failure/recovery, safe API errors/origin rejection, account
+and strategy isolation, explicit frontend POST/error/replay behavior. Actual full results
+in /private/tmp/marketpulse-final-review: backend208passed/1existing warning,5.85s;
+frontend49passed/13files,1.31s; Vite7.3.7 build passed/28modules,520ms. No failures.
+
+Running old backend had stopped with database_error again; underlying original storage
+failure cause is not established by this feature. Restarted it to load endpoint, then
+actual same-origin POST returned202/connecting. Follow-up showed Yahoo connected,
+successful_connections2, accepted_observations29 (up from18), a newer AAPL source timestamp,
+real_time_unverified/outside_regular_hours and persistence no_failure_reported. Exact
+statuses in feed-reconnect-verification.json. User automatic strategy was ON before and
+after; cash10000 remained unchanged at the control check. Did not disable/enable trading
+or submit test orders. Genuine subsequent strategy behavior remains user-configured.
+
+CUA getTab failed with native pipe unavailable. API/provider recovery was verified, but
+no successful browser click/layout inspection is claimed. Settings enable is process-only;
+control cannot start a backend process that is down or repair persistent storage failures.
+No report rewrite, commit, dependency change, brokerage or Part4.3 implementation.
+
+
+## November16,2026 — Requested test rerun and documentation; no commit/push
+Prompt: “run the test to make documentation ... once report.md is finished [user] will
+give the prompt to push.” Ran checks/documentation only; report.md unchanged, no application
+source edits and no GitHub mutation. Main account was not used for test orders.
+
+Environment: exact source copy /private/tmp/marketpulse-verification-20261116, existing
+November16 locked Python/Node dependencies. Captured87source/test/config/manifest hashes;
+all stayed unchanged. Backend pytest208passed/0failed/1existing Starlette/httpx warning,
+4.98s pytest-reported; frontend49passed/13files,1.40s; Vite7.3.7 build passed/28modules,
+453ms. Independent SMA script passed360synthetic points, max absolute error
+2.3283064365386963e-10 USD within1e-9 (relative0). Full command metadata/logs/JUnit/reference
+JSON are in docs/evidence/2026-11-16, with workstation usernames/hostnames redacted.
+
+Browser access worked for a new explicitly labeled fixture app on5174/backend8001, with
+its own temporary DB and provider intentionally offline.17checks passed: chart/volume/
+SMAs/markers/toggle, manual BUY/SELL/rejection, full automatic crossover→observed-price→
+fill/account path, nonzero unrealized P/L, backtest curve/history/error, replay pause/
+resume/completion and disabled trading, returnLive, compact cards and reload persistence.
+Actual screenshots/AX texts/check JSON are archived. This is synthetic fixture evidence,
+not fresh Yahoo/real market volume. Test-only harness endpoints existed only in the
+external temporary module; no production routes were added.
+
+Known arithmetic: manual10@100→10@110 yields cash10100/realized100. Automatic BUY16@125
+and SELL16@90 leaves cash9540/realized−460. Backtest is isolated: initial10000→9440,
+−5.6%,1roundtrip/2fills, maximum event-mark drawdown7.2%; repeat UI run matched payload
+except ID. Replay30/30events and backtest left the separate paper ledger5orders/4fills/
+cash9540unchanged at that checkpoint. Additional explicit manual MSFT1@80 then1@90
+verified unrealized10/equity9550 and final cash9550/realized−450. No production-account
+orders were placed. Collapsed card95→43px and stored closed state survived reload.
+
+Actual revised approaches: expected rejection initially said “insufficient manual shares”;
+empty-position app correctly returned “insufficient shares.” Updated the driver assertion.
+Datetime-local replay range fill failed in the automation path; retained generated15minute
+range and100×speed, verified playback completion. Manual replay-date editing is not claimed.
+A button-role locator missed native summary; used observed summary element. These were
+driver revisions, not hidden application failures; no application patch was made.
+
+CI YAML/events/working-directory/feed-disabled checks passed locally. Workflow remains
+uncommitted; no hosted CI execution or green check was claimed. New docs:
+docs/testing-2026-11-16.md, browser-test-cases.md, evidence/2026-11-16/* (redacted logs,
+source hashes, JSON, actual screenshots and reproducible fixture harness/config).
+Updated README, AGENTS, design, architecture, verification, Part4.2 review, AI-USE and
+this log. Source changed0files; no dependency upgrades, report rewrite, commit/push or
+Part4.3 work. Remaining: hosted CI after authorized push, submitted commit/video/report,
+no new live-provider browser validation and the existing execution/data limitations.
+
+
+## November 18, 2026 — confirmed chart signal presentation
+
+User requested BUY/SELL crossover arrows, independent visibility, details and actual backtest
+signals without changing trading logic. Existing marker support was extended, not rebuilt.
+Read-only saved-chart endpoint and fill association metadata added; no schema/trading changes.
+Final isolated verification:212 backend tests passed (one existing deprecation warning),
+58 frontend tests passed/14files; production build passed. Source hashes compared to workspace.
+Actual CUA fixture browser verification confirmed arrows/fills/SMA/volume and details, controls,
+symbol isolation, unavailable feed and separate saved backtest context. Found/fixed/rechecked
+volume-label overlap. Setup copy race caused one temporary build failure; final run passed.
+Fixture servers first failed to bind under sandbox; authorized local-listener escalation worked.
+No new live-provider or hosted-CI success claimed. No main-account test trades, report edit,
+commit/push or Part4.3. [Detailed results and files](chart-signals.md),
+[actual screenshot](evidence/2026-11-18-markers/backtest-markers.jpg).

@@ -146,3 +146,137 @@ to verify account identity, the authenticated GitHub CLI to create the requested
 Marketpulse repository, and shell tools to inspect candidate files and prepare the
 user-requested two-commit sequence. No additional editors/models, product AI APIs,
 credentials in source or generated market data were introduced.
+
+## Part 4.2 indicators and crossover stage — 2026-11-12
+- Continued with Codex desktop; exact deployed model variant remains unknown. No subagents,
+  additional editors, model switches, AI API or generated real-market evidence were used.
+- Shell tools inspected the existing code/schema/docs and created/published codex/part-2
+  from main. Implementation changes remain uncommitted. Installed chart library typings
+  were consulted for supported LineSeries/marker operations; no new package was installed.
+- Added backend calculations/APIs, Vue transport/overlays/toggle, deterministic tests and
+  documentation. Fraction/manual examples independently checked Decimal-based averages.
+- Tests/build and saved-data API/SQLite reference checks ran in a matching temporary copy.
+  A malformed test fixture was corrected, and missing temporary manifest/entry/config files
+  were restored from source. Exact failures/results are recorded in the evidence log.
+- In-app browser automation was attempted, reset and retried, but its native connection
+  was unavailable. No successful visual inspection or new screenshot is claimed.
+- No simulated trading, backtesting, execution, credential handling or report rewrite was
+  added. The existing running app backend was restarted to expose indicator endpoints.
+
+## Part 4.2 manual simulated-account stage — 2026-11-12
+The same Codex desktop agent (exact model unknown) used shell tools to inspect existing
+code/schema/docs, add the paper-account ledger/API/UI and deterministic tests, and run
+pytest/Vitest/build. No subagents, other editors/models, brokerage or AI API was used.
+All executed test trades used isolated test databases; the user-facing account stayed
+at its initial$10,000 with zero orders/fills. Actual saved-market migration evidence is
+separate from simulated accounting fixtures. CUA found browser transport unavailable;
+a native Safari attempt timed out. No successful visual verification/screenshot is claimed.
+No automatic trading, historical backtesting or report rewrite was added.
+
+## Automatic simulated crossover stage — 2026-11-12
+Continued with the same Codex desktop agent; exact deployed model remains unknown.
+Shell tools inspected existing implementations and added the strategy ledger/service,
+API, Vue panel/markers and deterministic tests. No subagents, additional editors/model
+switches, dependency changes, AI APIs or brokerage integrations were used. Tests/build
+ran in a matching temporary project copy with existing dependencies. SQLite backup,
+row hashes and integrity checks verified migration. CUA browser inventory failed with
+native pipe unavailable; no visual verification is claimed. Automatic trading remained
+OFF in the running app; all executed strategy test trades used isolated fixture databases.
+No historical profitability, backtest, real execution or report rewrite is claimed.
+
+## Historical backtesting stage — 2026-11-12
+The same Codex desktop agent (exact deployed model unknown) used shell tools to inspect
+existing strategy/account/schema code, add isolated backtesting/API/Vue views, refactor
+shared SMA and sizing functions, and execute deterministic pytest/Vitest/build checks.
+No subagents, new editors/models, dependencies, AI APIs or brokerage were used. Tests
+ran with existing dependencies in /private/tmp/marketpulse-final-review; tested source
+was compared against the workspace. SQLite backup, row hashes and two repeated runs
+verified saved-provider-data behavior separately from synthetic fixtures. CUA browser
+inventory reported native pipe unavailable; no visual verification is claimed. Backend
+was restarted to expose the new API, keeping automatic simulationOFF and existing
+accounts untouched. No report.md rewrite, commit or historical-profitability claim.
+
+## Verification and GitHub Actions stage — 2026-11-12
+Continued with the same Codex desktop agent; exact deployed model remains unknown.
+Shell tools inspected existing tests/code/conventions, added independent reference and
+full-path/accounting/backtest assertions, generated measured reference evidence, created
+GitHub Actions YAML and ran full tests/build/pip check in the matching temporary copy.
+Web browsing consulted official Python/pandas and GitHub Actions documentation for
+reference behavior and action/setup syntax; an obsolete pandas URL returned404 and was
+replaced by its current official path. No new dependencies, models/editors, subagents,
+AI APIs, brokerage, main-account trades or Part4.3 work were introduced. CUA inventory
+failed with native pipe unavailable; no visual browser result is claimed. Workflow was
+validated locally but not committed/pushed or executed on GitHub. Generated numerical
+fixtures are explicitly synthetic and not labeled provider observations.
+
+## Final Part4.2 requirements audit — 2026-11-12
+The same Codex desktop agent (exact model unknown) used shell tools to inspect the entire
+Part4.2 architecture/tests/docs/workflow, rerun tests/reference/build, trace deterministic
+provider-shaped inputs in a disposable app and backtest a read-only SQLite backup.
+The GitHub connector was used read-only to query push-triggered workflow runs for current
+HEAD; it returned an empty list. An initial connector argument-name mismatch was corrected
+from repository_full_name to repo_full_name; no remote mutation occurred. CUA browser
+inventory failed with native pipe unavailable, so no visual verification is claimed.
+No subagents/new models/editors/dependencies, AI APIs, credentials, brokerage, commits or
+Part4.3 functionality were introduced. Stale scope prose/docstring was corrected, current
+verification/security/submission limits documented. Existing report.md retained the same
+SHA256 and was not rewritten; no demonstration video was created or verified.
+
+## Chart-side simulated-account layout — 2026-11-12
+The same Codex desktop agent (exact model unknown) used shell tools to inspect Vue/CSS,
+move the existing single account instance beside the chart, split its ticket/ledger
+presentation, add a selected-position/estimate regression test and run tests/build.
+No model/editor/dependency changes, subagents, image generation, AI API or backend
+trading changes were introduced. CUA getTab for the running app failed with native pipe
+unavailable; no visual inspection/screenshot is claimed. Updated source was synchronized
+to the existing Vite runtime copy. No order was placed in the user's account.
+
+## Collapsible windows — 2026-11-12
+The same Codex desktop agent (exact deployed model unknown) used shell tools to inspect
+panel templates, add a shared native disclosure component/styles and regression tests,
+and rerun existing frontend/backend tests/build in the matched temporary copy. No new
+model/editor/dependency, subagent, AI API or backend behavior was introduced. CUA app-tab
+inspection again failed with native pipe unavailable; no visual verification/screenshot
+is claimed. Source was synchronized to the running Vite app; no account orders were placed.
+
+## Remembered panels and compact status cards — 2026-11-12
+The same Codex desktop agent (exact deployed model unknown) inspected disclosure/grid
+code and added localStorage preferences, native-detail integration, CSS sizing and
+regression tests using shell tools. Existing dependency-equipped temporary runtime ran
+backend/frontend tests/build. No new model/editor/dependency/subagent or backend behavior.
+CUA getTab again failed with native pipe unavailable; no successful visual verification
+is claimed. Running Vite source was updated; no account/trade/strategy settings were changed.
+
+## In-app Yahoo reconnect — 2026-11-12
+The same Codex desktop agent (exact model unknown) inspected the feed lifecycle/route/UI,
+added explicit serialized recovery and guarded button/error handling, and ran deterministic
+pytest/Vitest/build with shell tools. The existing local backend was restarted to load
+the endpoint. A real local POST was checked and Yahoo observations resumed; that provider
+evidence is distinct from mocked tests. Current user-selected automatic simulation was
+ON before/after recovery and was preserved; no test orders were submitted. No new model,
+editor, dependencies, subagents, AI API or broker. CUA tab inspection failed with native
+pipe unavailable; no browser visual/click verification is claimed.
+
+## Test rerun and successful browser workflows — November16,2026
+The same Codex desktop agent (exact deployed model unknown) used shell tools to copy and
+hash existing source, run pytest/Vitest/build/reference checks, validate CI YAML and write
+redacted documentation/evidence. Existing installed locked dependencies were reused.
+CUA browser access now worked: a separate fixture-only app/database on8001/5174 was tested
+with actual UI actions, screenshots and raw browser state.17workflow checks passed.
+Temporary test-only fixture controls seeded synthetic data and drove the existing pipeline;
+no production code, main account, trading configuration or provider connection was changed.
+Three actual driver expectations/input/locator approaches were revised and documented.
+No subagents, new editors/models, AI API, broker or Part4.3 work. report.md was unchanged;
+no commit/push/hosted CI was performed. Source hashes covered87files and stayed unchanged.
+
+
+## November 18, 2026 — crossover chart markers
+
+Codex desktop coding agent (exact deployed model unknown) used shell/Python file operations,
+pytest, Vitest, Vite and CUA browser automation to extend existing chart presentation, add a
+read-only saved-backtest chart endpoint and tests, inspect rendered fixture charts, fix a
+volume-label layout issue and document actual evidence. Official chart API documentation and
+installed Lightweight Charts5.2.1 typings were inspected. Existing locked dependencies reused;
+no new AI APIs, editors, models or subagents. Tests used an isolated source copy and disposable
+fixture DB; no user-account test trades. Setup race/listener failures and final passing results
+are disclosed in docs/chart-signals.md. No report.md edit, commit/push or Part4.3 work.

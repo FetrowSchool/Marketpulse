@@ -228,8 +228,9 @@ boundaries, derive indicators in a separate service, and use a deterministic clo
 backtests. It must distinguish source chronology, receipt chronology and available-at
 information to avoid future revision lookahead. Simulated orders/executions need a
 separate ledger and provenance; they must not be inserted as provider observations.
-These are design extension points only: no indicator, trade, backtest or ledger code
-has been implemented in this review. See docs/part-4.1-review.md for outstanding scope.
+This was the Part4.1 extension plan; the implemented Part4.2 indicator, simulated
+ledger/strategy and historical runner are described in the sections below. The original
+Part4.1 review remains in docs/part-4.1-review.md.
 
 ## Simultaneous live intervals — 2026-11-11
 Each per-symbol MarketRepository now constructs 1m, 5m and 15m in the same immediate
@@ -254,3 +255,150 @@ following preserves the user's viewport on ordinary revisions; context changes f
 the selected dataset. Fit all exits follow mode. Live and replay share the same chart
 component. Replay entry is now directly available from the bottom panel as well as
 the top mode selector, so disabled Live-mode playback buttons have a clear next action.
+
+## Part 4.2 indicator architecture — 2026-11-12
+Only SMA20/SMA50 and completed-candle crossover views are implemented in this stage.
+app/services/indicators.py is a pure Decimal-based calculator plus a read-only as-of
+repository query. routes/indicators.py validates selection/candle DTOs and exposes
+config, SMA, signals and chart-snapshot evaluation. No schema changes, new observation
+types, signal ledger, orders, backtesting or execution side effects are introduced.
+
+A crossing compares previous/current completed SMA pairs with inclusive equality on
+the previous pair and strict inequality on the current pair. Warm-up cannot create a
+signal. Each candle owns a stable result slot; revision recomputation replaces or
+retracts markers. Source/type/provenance boundaries reset windows. Incomplete candles
+are excluded, without provisional calculations. Exact rules/examples are in docs/indicators.md.
+
+Vue's revision-aware chart book is sent to the same backend calculator for live/history
+and replay. Replay only submits arrived/as-of rows; it never loads today's final history
+for its overlay. Coalesced requests, version checks and clearing old overlays prevent
+out-of-order calculation responses from mixing selections. Two chart lines and a marker
+plugin share the existing price pane, leaving volume and viewport behavior intact.
+The 1000-candle retained window has its own warm-up and can change earliest visible values
+as old history leaves; unlimited warm-up/backfill is not implemented. Automatic execution now uses the separate durable idempotent ledger described below;
+marker replacement never executes trades.
+
+## Manual simulated-account stage — 2026-11-12
+A separate paper-account service now owns the persistent manual order/fill/position
+ledger. The indicator service remains read-only and never calls it. Accounting uses
+integer micro-USD and total remaining cost basis, exact half-even allocation on partial
+sales, and full residual release on close. Cash and realized P/L are updated once per
+fill, with a unique order fill and canonical client idempotency key inside BEGIN IMMEDIATE.
+
+Manual market-style fills use explicit reference prices, whole shares, zero fees and
+zero slippage; no brokerage/order book or automatic execution is introduced. Pending
+orders reserve nothing and require a manual action, using their fixed reference price.
+Latest saved provider quotes value positions independently, with age/provenance and
+unavailable aggregate equity if any mark is missing. Replay disables manual execution
+in the UI and never rewinds or writes this account. See docs/paper-trading.md for rules.
+
+The existing market schema is preserved with an additive accounting schema/version and
+idempotent account seed. Account summaries are read snapshots; orders/fills retain audit
+history, while current balances and position basis are materialized transactional state.
+The automatic strategy now uses this idempotent order path with a trusted signal policy;
+its separate historical backtest runner is also described below.
+
+## Automatic simulated strategy — 2026-11-12
+The previously planned separate execution policy is now implemented in
+services/strategy.py. The read-only indicator calculator remains side-effect free.
+Committed market rows → hub publication + strategy post-commit hook → completed-candle
+as-of SMA calculation → durable signal/decision → later eligible observed quote → shared
+paper-account transaction → fill/account/scope ownership. Failure suspends strategy,
+without interrupting market persistence. Replay is excluded at both entry and provenance
+checks. StrategyPanel polls status/fills; chart circles identify executions separately
+from analytical arrows. See docs/strategy.md for exact timing, ownership and sizing.
+This live engine has no historical runner or broker; the separate historical runner is described below.
+
+## Historical backtesting — 2026-11-12
+services/backtests.py reads a bounded immutable observation snapshot and chooses first
+completed versions. It creates chronological open/availability events, with completion
+availability=max(end,receipt), then calls shared indicators.sma_step and
+paper_account.allocation_quantity. A separate integer-money account exists per run;
+only backtest_runs receives writes. No call into PaperAccount.submit, StrategyService,
+replay or the market hub occurs. The live strategy continues to use subsequent raw quotes;
+historical execution uses the next eligible candle open. BacktestPanel provides explicit
+run controls/results/equity/trade views with no automatic POST on mount. See
+[backtesting design and limitations](docs/backtesting.md) for revisions, delayed completion,
+source ordering, metrics and historical bias.
+
+## Verification and CI — 2026-11-12
+Production behavior is unchanged in this stage. The reference probe compares batch
+indicator snapshots and completed-close incremental sma_step with independent exact
+Fraction batch/running sums and pandas rolling means. Tolerance1e-9 absolute USD is a
+verification bound only; crossing comparisons remain strict Decimal. New trace assertions
+join signal/candle/order/fill/account state; explicit accounting/curve tables check the
+model independently. GitHub Actions installs locked dependencies and runs the same
+backend/reference/frontend/build checks with Yahoo disabled. Local checks pass; remote
+Actions and browser visual verification are not claimed. See docs/verification.md.
+
+## Final Part4.2 review
+The implemented layers and isolation boundaries passed the full automated suites and a
+disposable actual callback trace. The audit corrected stale earlier-stage “not implemented”
+wording; only a timing-helper docstring changed in source. No production behavior/schema
+change was needed. Browser/hosted-CI/video/submitted-commit requirements remain explicitly
+unverified rather than inferred from tests. See docs/part-4.2-review.md and its linked
+trace/backtest evidence for availability boundaries, calculations and limits.
+
+## Chart-side account layout
+App.vue now uses a primary chart column and a compact paper-trading rail. PaperAccount
+renders two sibling sections from one account state/refresh cycle: sticky balance/order
+ticket in the right grid column and a full-width position/order/fill ledger in the next
+row. This avoids a second account instance or competing order identity state. An optional
+docked prop applies the workstation presentation while retaining standalone rendering.
+Selected symbol/price/feed timestamp come from the existing dashboard; positions come
+from the existing account API. Estimated cost/proceeds is explicitly a browser reference
+estimate, not ledger accounting or an executable quote. Manual reference/idempotency and
+replay isolation are unchanged. Market metadata uses native details; mobile stacks the
+rail without sticky positioning. No changes to backend execution or strategy settings.
+
+## Shared panel disclosures
+CollapsiblePanel.vue uses native details/summary with an initially open local state,
+Hide/Show affordance and optional persistent subtitle. Slot content remains mounted
+while hidden; there are no v-if unmounts, provider reconnects or side-effecting controls.
+This preserves draft orders, chart instances and refresh state. Native keyboard controls
+and visible focus styling apply to title rows. Display-contents wrappers retain existing
+grid placement; chart ResizeObserver ignores zero-sized hidden hosts and resizes when
+shown. Strategy status remains visible when collapsed; collapse never disables execution.
+The existing metadata and nested history disclosures retain native behavior.
+
+## Persistent disclosure preferences and status-card sizing
+panelPreferences.js reads/writes only versioned open/closed browser-local values, guarded
+against unavailable/quota-limited storage and malformed data. CollapsiblePanel accepts an
+explicit stable storageKey independent of changing display titles. Native nested details
+share the same read/write helpers through vRememberPanel, including market metadata,
+account assumptions/history and backtest histories. Native listeners detach on unmount.
+No account/order/feed/strategy configuration is stored in this preference namespace.
+Status-grid align-items:start prevents closed disclosures from stretching to row height;
+closed cards have auto height/min-height0. Header rows remain available to reopen them.
+Preferences survive same-origin refreshes but do not sync across browsers or addresses.
+
+Chart-local selection: App.vue places the existing mode/symbol/interval inputs within the collapsible chart panel. Existing model bindings and switch handlers remain unchanged; global navigation retains branding/feed status. Responsive CSS wraps controls on narrow screens.
+
+## Explicit Yahoo recovery control
+MarketDataService.reconnect serializes manual recovery through an asyncio lock. It stops
+and awaits both current tasks (including in-flight SQLite/stream close), checks persistence
+with an empty write transaction, clears only feed failure/backoff/stopping state, enables
+its runtime settings and starts one shared stream/completion pair. A3second monotonic
+coalescing window prevents concurrent tabs from opening duplicate sessions. Existing
+repositories, callbacks, deduplication, source/receipt watermarks and account/strategy
+state stay intact. Storage failures remain visible and stop recovery.
+POST /api/market/reconnect accepts only configured browser origins when Origin is supplied,
+returns202/connecting on a request and503 for unavailable storage. It does not wait for
+or fabricate a quote. The chart-local button has30second request timeout, disabled busy/
+replay state and separate request/error notice; existing WebSocket feed messages remain
+authoritative. This is runtime feed control, not backend process management.
+
+## Verification without production side effects — November16
+An exact source copy supplied deterministic backend/frontend checks. A separate temporary
+fixture app/database on8001/5174 exercised actual browser controls and production service
+callbacks, while a visible banner identified all prices/volume as synthetic. Test-only
+fixture controls existed only in the external harness; no production routes or account
+state were changed. Local tests and browser evidence are recorded separately from hosted
+CI and live-provider observations. See docs/testing-2026-11-16.md; no implementation patch
+was needed during this run.
+
+
+## Crossover marker presentation — November 18, 2026
+
+Presentation consumes backend-confirmed completed records, validates exact candle revisions and provenance, and deduplicates IDs. Independent controls do not change trading. Backtest visualization reads saved decisions and immutable input revisions instead of recalculating.
+See [marker behavior and verification](docs/chart-signals.md).
