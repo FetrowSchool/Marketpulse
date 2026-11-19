@@ -4,7 +4,7 @@
 
 Project: MarketPulse — Live Market Workstation
 * Repository: [FetrowSchool/Marketpulse](https://github.com/FetrowSchool/Marketpulse)
-* Submitted Commit: [bc9ff3c46d25d0036ad29fe7cdc57bd9bcf11f27](https://github.com/FetrowSchool/Marketpulse/commit/bc9ff3c46d25d0036ad29fe7cdc57bd9bcf11f27)
+* Submitted Commit: [ae3f7422dfd63587040945438f9ef65aaeda4275](https://github.com/FetrowSchool/Marketpulse/commit/ae3f7422dfd63587040945438f9ef65aaeda4275)
 
 
 ## Project overview
